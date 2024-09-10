@@ -1,0 +1,375 @@
+
+                        $query = "
+                        SELECT 
+                            data_apar.*, 
+                            jenis_apar.jenis_apar 
+                        FROM data_apar 
+                        JOIN jenis_apar ON data_apar.jenis_apar = jenis_apar.id 
+                        WHERE data_apar.plat_nomer IS NOT NULL AND data_apar.plat_nomer != ''
+                        ORDER BY data_apar.id ASC
+                    ";
+
+
+
+
+
+
+
+
+
+
+<div class="modal fade" id="<?php echo $edit_modal_id; ?>" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h5 class="modal-title" id="editModalLabel">Edit Data</h5>
+                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                  </button>
+                                </div>
+                                <div class="modal-body">
+                                  <form action="proses/apar/proses_edit-apar.php" method="post">
+                                    <div class="row">
+                                      <div class="col-md-12 mb-3">
+                                        <label for="codeApar">Code Apar</label>
+                                        <input type="text" class="form-control" name="code_apar" id="codeApar" value="<?php echo $row['code_apar']; ?>" required="">
+                                        <input type="hidden" name="id" id="id" value="<?php echo $row['id']; ?>" />
+                                        <div class="invalid-feedback">
+                                          Valid Code Apar is required.
+                                        </div>
+                                      </div>
+                                      <?php
+                                      // Assuming the ID is passed via URL
+                                      $apar_query = "SELECT * FROM data_apar WHERE id = $apar_id";
+                                      $apar_result = mysqli_query($koneksi, $apar_query);
+                                      $row = mysqli_fetch_assoc($apar_result);
+
+
+
+                                      $jenis_query = "SELECT id, jenis_apar FROM jenis_apar";
+                                      $jenis_hasil = mysqli_query($koneksi, $jenis_query);
+                                      $jenis_option = [];
+                                      while ($jenis_row = mysqli_fetch_assoc($jenis_hasil)) {
+                                        $jenis_option[] = $jenis_row;
+                                      }
+                                      ?>
+                                      <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                          <label for="plat">Nomer Polisi</label>
+                                          <input type="text" class="form-control" name="plat" id="plat" value="<?php echo $row['plat_nomer']; ?>">
+                                          <div class="invalid-feedback">
+                                            Valid Departemen is required.
+                                          </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                          <label for="vendor">Vendor Refill</label>
+                                          <input type="text" class="form-control" name="vendor" id="vendor" value="<?php echo $row['vendor']; ?>">
+                                          <div class="invalid-feedback">
+                                            Valid Departemen is required.
+                                          </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                          <label for="jenisApar">Status Tabung</label>
+                                          <input type="date" class="form-control" name="tanggal_penggantian" id="jenisApar" value="<?php echo $row['tanggal_penggantian']; ?>">
+                                          <div class="invalid-feedback">
+                                            Valid Tanggal Refill is required.
+                                          </div>
+                                        </div>
+
+                                        <div class="col-md-6 mb-3">
+                                          <label for="jenisApar">Tanggal Refill</label>
+                                          <input type="date" class="form-control" name="tanggal_refill" id="jenisApar" value="<?php echo $row['tanggal_refill']; ?>" required="">
+                                          <div class="invalid-feedback">
+                                            Valid Tanggal Refill is required.
+                                          </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                          <label for="jenisApar">Tanggal Expired</label>
+                                          <input type="date" class="form-control" name="tanggal_expired" id="jenisApar" value="<?php echo $row['tanggal_expired']; ?>" required="">
+                                          <div class="invalid-feedback">
+                                            Valid Tanggal Expired is required.
+                                          </div>
+                                        </div>
+                                        <div class="col-md-12 mb-3">
+                                          <label class="" for="">Masa Pemakaian</label>
+                                          <div class="form-inline">
+                                            <div class="form-check-inline">
+                                              <input class="form-check-input" type="radio" name="masa_pemakaian" id="masa_pemakaian_baik" value="1 Tahun" <?php echo ($row['masa_pemakaian'] == '1 Tahun') ? 'checked' : ''; ?>>
+                                              <label class="custom-label text-black" for="masa_pemakaian_1 Tahun">1 Tahun</label>
+                                            </div>
+                                            <div class="form-check-inline">
+                                              <input class="form-check-input" type="radio" name="masa_pemakaian" id="masa_pemakaian_tidak_baik" value="2 Tahun" <?php echo ($row['masa_pemakaian'] == '2 Tahun') ? 'checked' : ''; ?>>
+                                              <label class="custom-label text-black" for="masa_pemakaian_tidak_baik">2 Tahun</label>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div class="col-md-12 mb-3">
+                                          <label class="" for="">Kondisi Fisik</label>
+                                          <div class="form-inline">
+                                            <div class="form-check-inline">
+                                              <input class="form-check-input" type="radio" name="kondisi" id="kondisi_baik" value="Layak" <?php echo ($row['kondisi'] == 'Layak') ? 'checked' : ''; ?>>
+                                              <label class="custom-label text-black" for="kondisi_1 Tahun">Layak</label>
+                                            </div>
+                                            <div class="form-check-inline">
+                                              <input class="form-check-input" type="radio" name="kondisi" id="kondisi_tidak_baik" value="Tidak Layak" <?php echo ($row['kondisi'] == 'Tidak Layak') ? 'checked' : ''; ?>>
+                                              <label class="custom-label text-black" for="kondisi_tidak_baik">Tidak Layak</label>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div class="col-md-12 mb-3">
+                                          <label for="jenisApar">Jenis Apar</label>
+                                          <select class="form-control" name="jenis_apar" id="jenis_apar" required>
+                                            <?php foreach ($jenis_option as $jenis) { ?>
+                                              <option value="<?php echo $jenis['id']; ?>" <?php if ($jenis['id'] == $row['jenis_apar']) echo 'selected'; ?>>
+                                                <?php echo $jenis['jenis_apar']; ?>
+                                              </option>
+                                            <?php } ?>
+                                          </select>
+                                          <div class="invalid-feedback">
+                                            Valid Jenis Apar is required.
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <style>
+                                        .form-check-inline {
+                                          width: 100px;
+                                        }
+                                      </style>
+                                      <div class="row">
+                                        <div class="col-md-12 mb-3">
+                                          <label class="" for="">Nozzle</label>
+                                          <div class="form-inline">
+                                            <div class="form-check-inline">
+                                              <input class="form-check-input" type="radio" name="nozzle" id="nozzle_baik" value="Baik" <?php echo ($row['nozzle'] == 'Baik') ? 'checked' : ''; ?>>
+                                              <label class="custom-label text-black" for="nozzle_baik">Baik</label>
+                                            </div>
+                                            <div class="form-check-inline">
+                                              <input class="form-check-input" type="radio" name="nozzle" id="nozzle_tidak_baik" value="Tidak Baik" <?php echo ($row['nozzle'] == 'Tidak Baik') ? 'checked' : ''; ?>>
+                                              <label class="custom-label text-black" for="nozzle_tidak_baik">Tidak Baik</label>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div class="col-md-12 mb-3">
+                                          <label class="" for="">Tabung</label>
+                                          <div class="form-inline">
+                                            <div class="form-check-inline">
+                                              <input class="form-check-input" type="radio" name="tabung" id="tabung_baik" value="Baik" <?php echo ($row['tabung'] == 'Baik') ? 'checked' : ''; ?>>
+                                              <label class="custom-label text-black" for="tabung_baik">Baik</label>
+                                            </div>
+                                            <div class="form-check-inline">
+                                              <input class="form-check-input" type="radio" name="tabung" id="tabung_tidak_baik" value="Tidak Baik" <?php echo ($row['tabung'] == 'Tidak Baik') ? 'checked' : ''; ?>>
+                                              <label class="custom-label text-black" for="tabung_tidak_baik">Tidak Baik</label>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="row">
+                                        <div class="col-md-12 mb-3">
+                                          <label class="" for="">Presure</label>
+                                          <div class="form-inline">
+                                            <div class="form-check-inline">
+                                              <input class="form-check-input" type="radio" name="presure" id="presure_baik" value="Baik" <?php echo ($row['presure'] == 'Baik') ? 'checked' : ''; ?>>
+                                              <label class="custom-label text-black" for="presure_baik">Baik</label>
+                                            </div>
+                                            <div class="form-check-inline">
+                                              <input class="form-check-input" type="radio" name="presure" id="presure_tidak_baik" value="Tidak Baik" <?php echo ($row['presure'] == 'Tidak Baik') ? 'checked' : ''; ?>>
+                                              <label class="custom-label text-black" for="presure_tidak_baik">Tidak Baik</label>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div class="col-md-12 mb-3">
+                                          <label class="" for="">Catridge</label>
+                                          <div class="form-inline">
+                                            <div class="form-check-inline">
+                                              <input class="form-check-input" type="radio" name="catridge" id="catridge_baik" value="Baik" <?php echo ($row['catridge'] == 'Baik') ? 'checked' : ''; ?>>
+                                              <label class="custom-label text-black" for="catridge_baik">Baik</label>
+                                            </div>
+                                            <div class="form-check-inline">
+                                              <input class="form-check-input" type="radio" name="catridge" id="catridge_tidak_baik" value="Tidak Baik" <?php echo ($row['catridge'] == 'Tidak Baik') ? 'checked' : ''; ?>>
+                                              <label class="custom-label text-black" for="catridge_tidak_baik">Tidak Baik</label>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="row">
+                                        <div class="col-md-12 mb-3">
+                                          <label class="" for="">Pin</label>
+                                          <div class="form-inline">
+                                            <div class="form-check-inline">
+                                              <input class="form-check-input" type="radio" name="pin" id="pin_baik" value="Baik" <?php echo ($row['pin'] == 'Baik') ? 'checked' : ''; ?>>
+                                              <label class="custom-label text-black" for="pin_baik">Baik</label>
+                                            </div>
+                                            <div class="form-check-inline">
+                                              <input class="form-check-input" type="radio" name="pin" id="pin_tidak_baik" value="Tidak Baik" <?php echo ($row['pin'] == 'Tidak Baik') ? 'checked' : ''; ?>>
+                                              <label class="custom-label text-black" for="pin_tidak_baik">Tidak Baik</label>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div class="col-md-12 mb-3">
+                                          <label class="" for="">Handle</label>
+                                          <div class="form-inline">
+                                            <div class="form-check-inline">
+                                              <input class="form-check-input" type="radio" name="handle" id="handle_baik" value="Baik" <?php echo ($row['handle'] == 'Baik') ? 'checked' : ''; ?>>
+                                              <label class="custom-label text-black" for="handle_baik">Baik</label>
+                                            </div>
+                                            <div class="form-check-inline">
+                                              <input class="form-check-input" type="radio" name="handle" id="handle_tidak_baik" value="Tidak Baik" <?php echo ($row['handle'] == 'Tidak Baik') ? 'checked' : ''; ?>>
+                                              <label class="custom-label text-black" for="handle_tidak_baik">Tidak Baik</label>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="row">
+                                        <div class="col-md-12 mb-3">
+                                          <label for="berat">Berat</label>
+                                          <input type="text" class="form-control" name="berat" id="berat" value="<?php echo $row['berat']; ?>" required="">
+                                          <div class="invalid-feedback">
+                                            Valid Berat is required.
+                                          </div>
+                                        </div>
+                                      </div>
+
+                                      <input type="hidden" name="activity" id="activity" value="<?php echo $user_details['nama'] ?> Telah Melakukan Pengeditan Apar  ">
+                                      <input type="hidden" name="tanggal" id="tanggal" value="<?php echo $dayName . ', ' . date('d-m-Y H:i:s') ?>">
+
+                                    </div>
+                                    <div class="modal-footer">
+                                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                      <button type="submit" class="btn btn-primary">Save changes</button>
+                                    </div>
+                                  </form>
+                                </div>
+                              </div>
+                            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+                            <div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalScrollableTitle">Tambah Apar</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form class="needs-validation" action="proses/apar/proses_tambah_apar.php" method="post">
+          <div class="row">
+            <div class="col-md-12 mb-3">
+              <label for="codeApar">Code Apar</label>
+              <input type="text" class="form-control" name="code_apar" id="codeApar" placeholder="" value="<?php echo $new_registration_number; ?>" required readonly style="color: black;">
+              <div class="invalid-feedback">
+                Valid Code Apar is required.
+              </div>
+            </div>
+            <div class="col-md-12 mb-3">
+              <label for="plat">Nomer Polisi</label>
+              <input type="text" class="form-control" name="plat" id="plat" placeholder="" required>
+              <div class="invalid-feedback">
+                Valid berat is required.
+              </div>
+            </div>
+
+
+            <?php
+            $query = "SELECT * FROM jenis_apar ORDER BY id ASC";
+            $result = mysqli_query($koneksi, $query);
+            if (!$result) {
+              die("query error: " . mysqli_error($koneksi));
+            }
+            ?>
+            <div class="col-md-12 mb-3">
+              <label for="jenisApar">Jenis Apar</label>
+              <select class="form-control" name="jenis_apar" id="jenisApar" required>
+                <option value="">Pilih...</option>
+                <?php
+                while ($row = mysqli_fetch_assoc($result)) {
+                  echo '<option value="' . $row['id'] . '">' . $row['jenis_apar'] . '</option>';
+                }
+                ?>
+              </select>
+              <input type="hidden" name="nozzle" />
+              <input type="hidden" name="tabung" />
+              <input type="hidden" name="presure" />
+              <input type="hidden" name="catridge" />
+              <input type="hidden" name="pin" />
+              <input type="hidden" name="handle" />
+              <div class="invalid-feedback">
+                Valid jenis apar is required.
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="tanggalRefill">Tanggal Refill</label>
+              <input type="date" class="form-control" name="tanggal_refill" id="tanggalRefill" placeholder="" required>
+              <div class="invalid-feedback">
+                Valid tanggal refill is required.
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="tanggalExpired">Tanggal Expired</label>
+              <input type="date" class="form-control" name="tanggal_expired" id="tanggalExpired" placeholder="" required>
+              <div class="invalid-feedback">
+                Valid tanggal expired is required.
+              </div>
+            </div>
+            <div class="col-md-12 mb-3">
+              <label for="berat">Berat</label>
+              <input type="text" class="form-control" name="berat" id="berat" placeholder="" required>
+              <div class="invalid-feedback">
+                Valid berat is required.
+              </div>
+            </div>
+            <?php
+            include '../koneksi.php';
+
+            $user = $_SESSION['username'];
+
+            $query = "SELECT * FROM user where username='$user'";
+            $result = mysqli_query($koneksi, $query);
+
+            if (!$result) {
+              die("query Error :" . mysqli_error($koneksi) . "-" . mysqli_error($koneksi));
+            }
+
+            date_default_timezone_set('Asia/Jakarta');
+            $days = array(
+              'Sunday' => 'Minggu',
+              'Monday' => 'Senin',
+              'Tuesday' => 'Selasa',
+              'Wednesday' => 'Rabu',
+              'Thursday' => 'Kamis',
+              'Friday' => 'Jumat',
+              'Saturday' => 'Sabtu'
+            );
+
+            $dayName = $days[date('l')];
+
+            while ($row = mysqli_fetch_assoc($result)) {
+            ?>
+
+              <input type="hidden" name="activity" id="activity" value="<?php echo $row['nama'] ?> Telah Melakukan Penambahan Apar ">
+              <input type="hidden" name="tanggal" id="tanggal" value="<?php echo $dayName . ', ' . date('d-m-Y H:i:s') ?>">
+
+            <?php
+            }
+            ?>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Save changes</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

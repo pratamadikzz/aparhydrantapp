@@ -1,0 +1,18 @@
+{
+    "name": "reyzet/cek_apar",
+    "description": "kok line 1 line 2 line 3 sih",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Reyzet\\CekApar\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "reyzet"
+        }
+    ],
+    "require": {
+        "phpoffice/phpspreadsheet": "^1.25"
+    }
+}
