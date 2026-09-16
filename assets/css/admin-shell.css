@@ -1,0 +1,83 @@
+.admin-logout-modal .modal-content {
+  overflow: hidden;
+  border: 0;
+  border-radius: 22px;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, .24);
+}
+
+.admin-logout-modal .modal-body {
+  padding: 30px;
+  text-align: center;
+}
+
+.admin-logout-modal__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 62px;
+  height: 62px;
+  margin-bottom: 16px;
+  border: 8px solid #fee2e2;
+  border-radius: 50%;
+  background: #fef2f2;
+  color: #dc2626;
+  font-size: 20px;
+}
+
+.admin-logout-modal .modal-title {
+  margin: 0;
+  color: #0f172a;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.admin-logout-modal__text {
+  max-width: 290px;
+  margin: 8px auto 0;
+  color: #64748b;
+  font-size: .84rem;
+  line-height: 1.55;
+}
+
+.admin-logout-modal__actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.admin-logout-modal__actions button,
+.admin-logout-modal__actions a {
+  display: inline-flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  border-radius: 11px;
+  font-size: .82rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.admin-logout-modal__cancel {
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  color: #475569;
+}
+
+.admin-logout-modal__confirm {
+  border: 1px solid #dc2626;
+  background: #dc2626;
+  color: #fff;
+  box-shadow: 0 8px 16px rgba(220, 38, 38, .2);
+}
+
+.admin-logout-modal__confirm:hover {
+  background: #b91c1c;
+  color: #fff;
+}
+
+@media (max-width: 480px) {
+  .admin-logout-modal__actions {
+    flex-direction: column-reverse;
+  }
+}

@@ -16,6 +16,7 @@ $tgl_refill = $_POST['tanggal_refill'];
 $tgl_exp = $_POST['tanggal_expired'];
 $berat = $_POST['berat'];
 $plat = $_POST['plat'];
+$jenis_tabung = $_POST['jenis_tabung'];
 
 // Check if plat_nomer is provided
 if (empty($plat)) {

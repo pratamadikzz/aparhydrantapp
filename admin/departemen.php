@@ -3,10 +3,13 @@ session_start();
 
 // Cek apakah pengguna sudah login atau belum
 if (!isset($_SESSION['username'])) {
-    // Jika belum login, arahkan ke login.php
-    header("Location: ../login.php");
-    exit();
+  // Jika belum login, arahkan ke login.php
+  header("Location: ../login.php");
+  exit();
 }
+
+// Ambil level pengguna dari session
+$user_level = $_SESSION['level'] ?? 'guest'; // Default ke 'guest' jika tidak ada level
 
 // Tambahkan kode lainnya untuk index.php di bawah sini
 ?>
@@ -15,9 +18,9 @@ if (!isset($_SESSION['username'])) {
 
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>Cek Apar - Departemen</title>
+    <title>Cek Apar | Hydrant - Departemen</title>
     <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
-    <link rel="icon" href="../assets/img/logokecil.png" type="image/x-icon" />
+    <link rel="icon" href="../assets/img/logokecilAH.png" type="image/x-icon" />
 
     <!-- Fonts and icons -->
     <script src="../assets/js/plugin/webfont/webfont.min.js"></script>
@@ -59,7 +62,7 @@ if (!isset($_SESSION['username'])) {
                 <!-- Logo Header -->
                 <div class="logo-header" data-background-color="dark">
                     <a href="../index.php" class="logo">
-                        <img src="../assets/img/logo.png" alt="navbar brand" class="navbar-brand" height="200px" width="200px" />
+                    <img src="../assets/img/logoAH.png" alt="navbar brand" class="navbar-brand" height="200px" width="200px" />
                     </a>
                     <div class="nav-toggle">
                         <button class="btn btn-toggle toggle-sidebar">
@@ -76,97 +79,103 @@ if (!isset($_SESSION['username'])) {
                 <!-- End Logo Header -->
             </div>
             <div class="sidebar-wrapper scrollbar scrollbar-inner">
-                <div class="sidebar-content">
-                    <ul class="nav nav-secondary">
-                        <li class="nav-item active">
+        <div class="sidebar-content">
+          <ul class="nav nav-secondary">
+            <li class="nav-item active">
 
-                        <li class="nav-item">
-                            <a href="../index.php">
-                                <i class="fas fa-home"></i>
-                                <p>Dashboard</p>
+            <li class="nav-item">
+              <a href="../index.php">
+                <i class="fas fa-home"></i>
+                <p>Dashboard</p>
 
-                            </a>
-                        </li>
-                        </li>
-                        <li class="nav-section">
-                            <span class="sidebar-mini-icon">
-                                <i class="fa fa-ellipsis-h"></i>
-                            </span>
-                            <h4 class="text-section">Menu</h4>
-                        </li>
-                        <li class="nav-item">
-                            <a href="scan.php">
-                                <i class="fa-solid fa-qrcode"></i>
-                                <p>Scan Code</p>
+              </a>
+            </li>
+            </li>
+            <li class="nav-section">
+              <span class="sidebar-mini-icon">
+                <i class="fa fa-ellipsis-h"></i>
+              </span>
+              <h4 class="text-section">Menu</h4>
+            </li>
+            <li class="nav-item">
+              <a href="scan.php">
+                <i class="fa-solid fa-qrcode"></i>
+                <p>Scan Code</p>
 
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="user.php">
-                                <i class="fas fa-address-card"></i>
-                                <p>Data Pengguna</p>
+              </a>
+            </li>
+            <?php if ($user_level === 'admin'): ?>
+            <li class="nav-item">
+              <a href="user.php">
+                <i class="fas fa-address-card"></i>
+                <p>Data Pengguna</p>
 
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a data-toggle="collapse" href="#apar" aria-expanded="false" aria-controls="apar">
-                            <i class="fa-solid fa-fire-extinguisher"></i>
-                                <p>Data Master Apar</p>
-                                <span class="caret"></span>
-                            </a>
-                            <div class="collapse" id="apar">
-                                <ul class="nav nav-collapse">
-                                    <li>
-                                        <a href="apar.php">
-                                            <span class="sub-item">Data Apar</span>
-                                        </a>
-                                    </li>
-                                    <li>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a data-toggle="collapse" href="#apar" aria-expanded="false" aria-controls="apar">
+                <i class="fa-solid fa-database"></i>
+                <p>Data Master</p>
+                <span class="caret"></span>
+              </a>
+              <div class="collapse" id="apar">
+                <ul class="nav nav-collapse">
+                <li>
+                    <a href="hydrant.php">
+                      <span class="sub-item">Data Hydrant</span>
+                    </a>
+                  </li>
+                  <li >
+                    <a href="apar.php">
+                      <span class="sub-item">Data Apar</span>
+                    </a>
+                  </li>
+                  <li>
                     <a href="apar_mobil.php">
                       <span class="sub-item">Data Apar Mobil</span>
                     </a>
                   </li>
-                                    <li>
-                                        <a href="jenis_apar.php">
-                                            <span class="sub-item">Jenis Apar</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                       
+                  <li>
+                    <a href="jenis_apar.php">
+                      <span class="sub-item">Jenis Apar</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </li>
 
 
 
-                        <li class="nav-item">
-                            <a data-toggle="collapse" href="#area" aria-expanded="false" aria-controls="area">
-                                <i class="fas fa-map-marker-alt"></i>
-                                <p>Area Apar</p>
-                                <span class="caret"></span>
-                            </a>
-                            <div class="collapse" id="area">
-                                <ul class="nav nav-collapse">
-                                    <li>
-                                        <a href="lokasi.php">
-                                        <span class="sub-item">Lokasi</span>
-                                        </a>
-                                    </li>
-                                    <li class="active">
-                                        <a href="departemen.php">
-                                            <span class="sub-item">Departemen</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li class="nav-item">
+
+            <li class="nav-item">
+              <a data-toggle="collapse" href="#area" aria-expanded="false" aria-controls="area">
+                <i class="fas fa-map-marker-alt"></i>
+                <p>Area Apar</p>
+                <span class="caret"></span>
+              </a>
+              <div class="collapse" id="area">
+                <ul class="nav nav-collapse">
+                  <li>
+                    <a href="lokasi.php">
+                      <span class="sub-item">Lokasi</span>
+                    </a>
+                  </li>
+                  <li class="active">
+                    <a href="departemen.php">
+                      <span class="sub-item">Departemen</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </li>
+            <li class="nav-item">
               <a href="activity.php">
               <i class="fa-solid fa-clock-rotate-left"></i>
                 <p>Aktivitas Pengguna</p>
 
               </a>
             </li>
-                        <li class="nav-item">
+            <li class="nav-item">
                             <a href="calender-exp.php">
                                 <i class="fa-regular fa-calendar"></i>
                                 <p>Kalender Apar</p>
@@ -175,32 +184,47 @@ if (!isset($_SESSION['username'])) {
                         </li>
 
 
-                        <li class="nav-item">
-                            <a href="agenda.php">
-                                <i class="fa-solid fa-calendar-xmark"></i>
-                                <p>Agenda Inspeksi</p>
+            <li class="nav-item">
+              <a href="agenda.php">
+                <i class="fa-solid fa-calendar-xmark"></i>
+                <p>Agenda Inspeksi</p>
 
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="laporan.php">
-                                <i class="fa-solid fa-bullhorn"></i>
-                                <p>Laporan Inspeksi</p>
+              </a>
+            </li>
+            <?php endif; ?>
+            <li class="nav-item">
+              <a data-bs-toggle="collapse" href="#laporan">
+                <i class="fa-solid fa-bullhorn"></i>
+                <p>Laporan Inspeksi</p>
+                <span class="caret"></span>
+              </a>
+              <div class="collapse" id="laporan">
+                <ul class="nav nav-collapse">
+                  <li>
+                    <a href="laporan.php">
+                      <span class="sub-item">Laporan Inspeksi Apar</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="laporanhydrant.php">
+                      <span class="sub-item">Laporan Inspeksi Hydrant</span>
+                    </a>
+                  </li>
 
-                            </a>
-                        </li>
+                </ul>
+              </div>
+            </li>
 
+            <li class="nav-item">
+              <a href="logout.php">
+                <i class="fas fa-door-open"></i>
+                <p>Log out</p>
 
-                        <li class="nav-item">
-                            <a href="logout.php">
-                                <i class="fas fa-door-open"></i>
-                                <p>Log out</p>
-
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
         </div>
         <!-- End Sidebar -->
 
@@ -210,7 +234,7 @@ if (!isset($_SESSION['username'])) {
                     <!-- Logo Header -->
                     <div class="logo-header" data-background-color="dark">
                         <a href="../index.php" class="logo">
-                            <img src="../assets/img/logo.png" alt="navbar brand" class="navbar-brand" height="200px" width="200px" />
+                        <img src="../assets/img/logoAH.png" alt="navbar brand" class="navbar-brand" height="200px" width="200px" />
                         </a>
                         <div class="nav-toggle">
                             <button class="btn btn-toggle toggle-sidebar">
@@ -368,10 +392,7 @@ if (!isset($_SESSION['username'])) {
                                             </div>
                                         </div>
                                     </li>
-                                    <li>
-                                        <a class="see-all" href="../notif.php">See all notifications<i class="fa fa-angle-right"></i>
-                                        </a>
-                                    </li>
+                             
                                 </ul>
                             </li>
                             <?php
@@ -550,7 +571,7 @@ if (!isset($_SESSION['username'])) {
                                                         <div class="modal-dialog" role="document">
                                                             <div class="modal-content">
                                                                 <div class="modal-header">
-                                                                    <h5 class="modal-title" id="editModalLabel">Edit Data</h5>
+                                                                    <h5 class="modal-title" id="editModalLabel">Hapus Data</h5>
                                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                                         <span aria-hidden="true">&times;</span>
                                                                     </button>

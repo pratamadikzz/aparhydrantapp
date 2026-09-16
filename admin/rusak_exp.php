@@ -3,10 +3,15 @@ session_start();
 
 // Cek apakah pengguna sudah login atau belum
 if (!isset($_SESSION['username'])) {
-    // Jika belum login, arahkan ke login.php
-    header("Location: login.php");
-    exit();
+  // Jika belum login, arahkan ke login.php
+  header("Location: ../login.php");
+  exit();
 }
+
+// Ambil level pengguna dari session
+$user_level = $_SESSION['level'] ?? 'guest'; // Default ke 'guest' jika tidak ada level
+$guide = $_GET['guide'] ?? '';
+$focusCode = trim($_GET['focus'] ?? '');
 
 // Tambahkan kode lainnya untuk index.php di bawah sini
 ?>
@@ -15,9 +20,9 @@ if (!isset($_SESSION['username'])) {
 
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>Cek Apar - Rusak Dan Expired</title>
+    <title>Cek Apar | Hydrant  - Rusak Dan Expired</title>
     <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
-    <link rel="icon" href="../assets/img/logokecil.png" type="image/x-icon" />
+    <link rel="icon" href="../assets/img/logokecilAH.png" type="image/x-icon" />
 
     <!-- Fonts and icons -->
     <script src="../assets/js/plugin/webfont/webfont.min.js"></script>
@@ -48,9 +53,95 @@ if (!isset($_SESSION['username'])) {
 
     <!-- CSS Just for demo purpose, don't include it in your project -->
     <link rel="stylesheet" href="../assets/css/demo.css" />
+    <style>
+        .context-guide {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            margin: 0 0 22px;
+            padding: 18px 20px;
+            border: 1px solid #fecaca;
+            border-radius: 18px;
+            background: linear-gradient(135deg, #fff7ed, #fff1f2);
+            box-shadow: 0 10px 24px rgba(127, 29, 29, .08);
+        }
+
+        .context-guide__icon {
+            display: inline-flex;
+            flex: 0 0 42px;
+            align-items: center;
+            justify-content: center;
+            width: 42px;
+            height: 42px;
+            border-radius: 13px;
+            background: #dc2626;
+            color: #fff;
+            font-size: 17px;
+        }
+
+        .context-guide__content {
+            flex: 1;
+        }
+
+        .context-guide__content strong {
+            display: block;
+            color: #7f1d1d;
+            font-size: .9rem;
+        }
+
+        .context-guide__content p {
+            margin: 4px 0 0;
+            color: #9f1239;
+            font-size: .78rem;
+            line-height: 1.55;
+        }
+
+        .context-guide__close {
+            border: 0;
+            background: transparent;
+            color: #9f1239;
+            font-size: .76rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .context-guide__close:hover {
+            color: #7f1d1d;
+            text-decoration: underline;
+        }
+
+        .context-guide-focus {
+            position: relative;
+            z-index: 1;
+            outline: 3px solid #f97316;
+            outline-offset: -2px;
+            box-shadow: 0 0 0 6px rgba(249, 115, 22, .18);
+            animation: contextGuidePulse 1.8s ease-in-out 2;
+        }
+
+        @keyframes contextGuidePulse {
+            50% { background-color: #ffedd5; }
+        }
+
+        @media (max-width: 575px) {
+            .context-guide {
+                gap: 10px;
+                padding: 15px;
+            }
+
+            .context-guide__close {
+                font-size: 0;
+            }
+
+            .context-guide__close::before {
+                content: "×";
+                font-size: 1.25rem;
+            }
+        }
+    </style>
 </head>
 
-<body>
+<body data-guide="<?php echo htmlspecialchars($guide, ENT_QUOTES, 'UTF-8'); ?>" data-focus-code="<?php echo htmlspecialchars($focusCode, ENT_QUOTES, 'UTF-8'); ?>">
     <div class="wrapper">
         <!-- Sidebar -->
         <div class="sidebar" data-background-color="dark">
@@ -58,7 +149,7 @@ if (!isset($_SESSION['username'])) {
                 <!-- Logo Header -->
                 <div class="logo-header" data-background-color="dark">
                     <a href="../index.php" class="logo">
-                        <img src="../assets/img/logo.png" alt="navbar brand" class="navbar-brand" height="200px" width="200px" />
+                    <img src="../assets/img/logoAH.png" alt="navbar brand" class="navbar-brand" height="200px" width="200px" />
                     </a>
                     <div class="nav-toggle">
                         <button class="btn btn-toggle toggle-sidebar">
@@ -75,130 +166,153 @@ if (!isset($_SESSION['username'])) {
                 <!-- End Logo Header -->
             </div>
             <div class="sidebar-wrapper scrollbar scrollbar-inner">
-                <div class="sidebar-content">
-                    <ul class="nav nav-secondary">
-                        <li class="nav-item active">
+        <div class="sidebar-content">
+          <ul class="nav nav-secondary">
+            <li class="nav-item active">
 
-                        <li class="nav-item">
-                            <a href="../index.php">
-                                <i class="fas fa-home"></i>
-                                <p>Dashboard</p>
+            <li class="nav-item">
+              <a href="../index.php">
+                <i class="fas fa-home"></i>
+                <p>Dashboard</p>
 
-                            </a>
-                        </li>
-                        </li>
-                        <li class="nav-section">
-                            <span class="sidebar-mini-icon">
-                                <i class="fa fa-ellipsis-h"></i>
-                            </span>
-                            <h4 class="text-section">Menu</h4>
-                        </li>
-                        <li class="nav-item">
-                            <a href="scan.php">
-                                <i class="fa-solid fa-qrcode"></i>
-                                <p>Scan Code</p>
+              </a>
+            </li>
+            </li>
+            <li class="nav-section">
+              <span class="sidebar-mini-icon">
+                <i class="fa fa-ellipsis-h"></i>
+              </span>
+              <h4 class="text-section">Menu</h4>
+            </li>
+            <li class="nav-item">
+              <a href="scan.php">
+                <i class="fa-solid fa-qrcode"></i>
+                <p>Scan Code</p>
 
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="user.php">
-                                <i class="fas fa-address-card"></i>
-                                <p>Data Pengguna</p>
+              </a>
+            </li>
+            <?php if ($user_level === 'admin'): ?>
+            <li class="nav-item">
+              <a href="user.php">
+                <i class="fas fa-address-card"></i>
+                <p>Data Pengguna</p>
 
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a data-toggle="collapse" href="#apar" aria-expanded="false" aria-controls="apar">
-                                <i class="fa-solid fa-fire-extinguisher"></i>
-                                <p>Data Master Apar</p>
-                                <span class="caret"></span>
-                            </a>
-                            <div class="collapse" id="apar">
-                                <ul class="nav nav-collapse">
-                                    <li>
-                                        <a href="apar.php">
-                                            <span class="sub-item">Data Apar</span>
-                                        </a>
-                                    </li>
-                                    <li>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a data-toggle="collapse" href="#apar" aria-expanded="false" aria-controls="apar">
+                <i class="fa-solid fa-database"></i>
+                <p>Data Master</p>
+                <span class="caret"></span>
+              </a>
+              <div class="collapse" id="apar">
+                <ul class="nav nav-collapse">
+                <li>
+                    <a href="hydrant.php">
+                      <span class="sub-item">Data Hydrant</span>
+                    </a>
+                  </li>
+                  <li >
+                    <a href="apar.php">
+                      <span class="sub-item">Data Apar</span>
+                    </a>
+                  </li>
+                  <li>
                     <a href="apar_mobil.php">
                       <span class="sub-item">Data Apar Mobil</span>
                     </a>
                   </li>
-                                    <li>
-                                        <a href="jenis_apar.php">
-                                            <span class="sub-item">Jenis Apar</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
+                  <li>
+                    <a href="jenis_apar.php">
+                      <span class="sub-item">Jenis Apar</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </li>
 
 
 
 
-                        <li class="nav-item">
-                            <a data-toggle="collapse" href="#area" aria-expanded="false" aria-controls="area">
-                                <i class="fas fa-map-marker-alt"></i>
-                                <p>Area Apar</p>
-                                <span class="caret"></span>
-                            </a>
-                            <div class="collapse" id="area">
-                                <ul class="nav nav-collapse">
-                                    <li>
-                                        <a href="lokasi.php">
-                                            <span class="sub-item">Data Apar</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="departemen.php">
-                                            <span class="sub-item">Departemen</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li class="nav-item">
+            <li class="nav-item">
+              <a data-toggle="collapse" href="#area" aria-expanded="false" aria-controls="area">
+                <i class="fas fa-map-marker-alt"></i>
+                <p>Area Apar</p>
+                <span class="caret"></span>
+              </a>
+              <div class="collapse" id="area">
+                <ul class="nav nav-collapse">
+                  <li>
+                    <a href="lokasi.php">
+                      <span class="sub-item">Lokasi</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="departemen.php">
+                      <span class="sub-item">Departemen</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </li>
+            <li class="nav-item">
               <a href="activity.php">
               <i class="fa-solid fa-clock-rotate-left"></i>
                 <p>Aktivitas Pengguna</p>
 
               </a>
             </li>
-
-                        <li class="nav-item">
+            <li class="nav-item">
                             <a href="calender-exp.php">
                                 <i class="fa-regular fa-calendar"></i>
                                 <p>Kalender Apar</p>
 
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a href="agenda.php">
-                                <i class="fa-solid fa-calendar-xmark"></i>
-                                <p>Agenda Inspeksi</p>
-
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="laporan.php">
-                                <i class="fa-solid fa-bullhorn"></i>
-                                <p>Laporan Inspeksi</p>
-
-                            </a>
-                        </li>
 
 
-                        <li class="nav-item">
-                            <a href="logout.php">
-                                <i class="fas fa-door-open"></i>
-                                <p>Log out</p>
+            <li class="nav-item">
+              <a href="agenda.php">
+                <i class="fa-solid fa-calendar-xmark"></i>
+                <p>Agenda Inspeksi</p>
 
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+              </a>
+            </li>
+            <?php endif; ?>
+            <li class="nav-item">
+              <a data-bs-toggle="collapse" href="#laporan">
+                <i class="fa-solid fa-bullhorn"></i>
+                <p>Laporan Inspeksi</p>
+                <span class="caret"></span>
+              </a>
+              <div class="collapse" id="laporan">
+                <ul class="nav nav-collapse">
+                  <li>
+                    <a href="laporan.php">
+                      <span class="sub-item">Laporan Inspeksi Apar</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="laporanhydrant.php">
+                      <span class="sub-item">Laporan Inspeksi Hydrant</span>
+                    </a>
+                  </li>
+
+                </ul>
+              </div>
+            </li>
+
+
+            <li class="nav-item">
+              <a href="logout.php">
+                <i class="fas fa-door-open"></i>
+                <p>Log out</p>
+
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
         </div>
         <!-- End Sidebar -->
 
@@ -208,7 +322,7 @@ if (!isset($_SESSION['username'])) {
                     <!-- Logo Header -->
                     <div class="logo-header" data-background-color="dark">
                         <a href="../index.php" class="logo">
-                            <img src="../assets/img/logo.png" alt="navbar brand" class="navbar-brand" height="200px" width="200px" />
+                        <img src="../assets/img/logoAH.png" alt="navbar brand" class="navbar-brand" height="200px" width="200px" />
                         </a>
                         <div class="nav-toggle">
                             <button class="btn btn-toggle toggle-sidebar">
@@ -335,7 +449,7 @@ if (!isset($_SESSION['username'])) {
                                                 // Menampilkan alert untuk item yang sudah kadaluarsa
                                                 if ($near_expiry_result->num_rows > 0) {
                                                     while ($row = $near_expiry_result->fetch_assoc()) {
-                                                        echo "  <a href='#'>";
+                                                        echo "  <a href='apar.php?code=" . urlencode($row["code_apar"]) . "&guide=near_expiry'>";
                                                         echo "  <div class='notif-icon '>";
                                                         echo "   <img src='../assets/img/warning.png' width='40px'> ";
                                                         echo " </div>";
@@ -348,7 +462,7 @@ if (!isset($_SESSION['username'])) {
                                                 }
                                                 if ($expired_result->num_rows > 0) {
                                                     while ($row = $expired_result->fetch_assoc()) {
-                                                        echo "  <a href='#'>";
+                                                        echo "  <a href='apar.php?code=" . urlencode($row["code_apar"]) . "&guide=expired'>";
                                                         echo "  <div class='notif-icon'>";
                                                         echo "  <img src='../assets/img/danger.png' width='40px'>";
                                                         echo " </div>";
@@ -367,10 +481,7 @@ if (!isset($_SESSION['username'])) {
                                             </div>
                                         </div>
                                     </li>
-                                    <li>
-                                        <a class="see-all" href="../notif.php">See all notifications<i class="fa fa-angle-right"></i>
-                                        </a>
-                                    </li>
+                                  
                                 </ul>
                             </li>
 
@@ -424,6 +535,16 @@ if (!isset($_SESSION['username'])) {
 
             <div class="container">
                 <div class="page-inner">
+                    <?php if ($guide === 'expired'): ?>
+                        <div class="context-guide" id="contextGuide" role="status">
+                            <div class="context-guide__icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                            <div class="context-guide__content">
+                                <strong>Petunjuk: periksa aset expired</strong>
+                                <p>Gunakan filter <b>Expired</b>, temukan kode APAR yang disorot, lalu tindak lanjuti pemeriksaan atau penggantian aset.</p>
+                            </div>
+                            <button type="button" class="context-guide__close" id="skipContextGuide">Lewati</button>
+                        </div>
+                    <?php endif; ?>
                     <br>
                     <br>
                     <br>
@@ -538,16 +659,22 @@ if (!$result) {
     .dt-button.buttons-excel {
         background-color: #28a745; /* Green for Excel */
         color: white;
+        border:none;
+        transition: 0.3s ease-in-out;
     }
 
     .dt-button.buttons-pdf {
         background-color: #dc3545; /* Red for PDF */
         color: white;
+        border:none;
+        transition: 0.3s ease-in-out;
     }
 
     .dt-button.buttons-print {
         background-color: #007bff; /* Blue for Print */
         color: white;
+        border:none;
+        transition: 0.3s ease-in-out;
     }
 
     /* Optional: Change the button border radius for a rounded look */
@@ -560,6 +687,22 @@ if (!$result) {
     /* Optional: Add a hover effect */
     .dt-button:hover {
         opacity: 0.8;
+        transition: 0.3s ease-in-out;
+    }
+    .dt-button.buttons-print:hover {
+        opacity: 0.8;
+        transition: 0.3s ease-in-out;
+        background-color: #020bff;
+    }
+    .dt-button.buttons-pdf:hover {
+        opacity: 0.8;
+        transition: 0.3s ease-in-out;
+        background-color: #dc4545;
+    }
+    .dt-button.buttons-excel:hover {
+        opacity: 0.8;
+        transition: 0.3s ease-in-out;
+        background-color: #27a789;
     }
 </style>
 
@@ -579,6 +722,34 @@ if (!$result) {
             });
         });
     </script>
+
+    <?php if ($guide === 'expired'): ?>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var guide = document.getElementById('contextGuide');
+                var skip = document.getElementById('skipContextGuide');
+                var focusCode = document.body.dataset.focusCode;
+
+                if (localStorage.getItem('skipExpiredGuide') === '1') {
+                    guide?.remove();
+                }
+
+                if (focusCode) {
+                    document.querySelectorAll('#mauexport tbody tr').forEach(function(row) {
+                        if (row.cells[0] && row.cells[0].textContent.trim() === focusCode) {
+                            row.classList.add('context-guide-focus');
+                            row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
+                    });
+                }
+
+                skip?.addEventListener('click', function() {
+                    localStorage.setItem('skipExpiredGuide', '1');
+                    guide.remove();
+                });
+            });
+        </script>
+    <?php endif; ?>
       
 
 

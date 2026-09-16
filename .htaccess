@@ -1,0 +1,13 @@
+# Pastikan semua file XML dikenali sebagai XML
+AddType application/xml .xml
+AddType text/xml .xml
+
+# Khusus sitemap.xml, paksa Content-Type XML
+<Files "sitemap.xml">
+  ForceType application/xml
+    Header set Content-Type "application/xml"
+    </Files>
+    <Files "sitemap.php">
+      ForceType application/xml
+      </Files>
+      

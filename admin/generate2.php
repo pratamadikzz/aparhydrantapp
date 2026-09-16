@@ -3,10 +3,13 @@ session_start();
 
 // Cek apakah pengguna sudah login atau belum
 if (!isset($_SESSION['username'])) {
-    // Jika belum login, arahkan ke login.php
-    header("Location: login.php");
-    exit();
+  // Jika belum login, arahkan ke login.php
+  header("Location: ../login.php");
+  exit();
 }
+
+// Ambil level pengguna dari session
+$user_level = $_SESSION['level'] ?? 'guest'; // Default ke 'guest' jika tidak ada level
 
 // Tambahkan kode lainnya untuk index.php di bawah sini
 ?>
@@ -15,7 +18,7 @@ if (!isset($_SESSION['username'])) {
 
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>Cek Apar - Generate Barcode</title>
+    <title>Cek Apar | Hydrant - Generate Barcode</title>
     <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
     <link rel="icon" href="../assets/img/logokecil.png" type="image/x-icon" />
 
@@ -102,6 +105,7 @@ if (!isset($_SESSION['username'])) {
 
                             </a>
                         </li>
+                        <?php if ($user_level === 'admin'): ?>
                         <li class="nav-item">
                             <a href="user.php">
                                 <i class="fas fa-address-card"></i>
@@ -149,13 +153,29 @@ if (!isset($_SESSION['username'])) {
 
                             </a>
                         </li>
+                        <?php endif; ?>
                         <li class="nav-item">
-                            <a href="laporan.php">
-                                <i class="fa-solid fa-bullhorn"></i>
-                                <p>Laporan Inspeksi</p>
+              <a data-bs-toggle="collapse" href="#laporan">
+                <i class="fa-solid fa-bullhorn"></i>
+                <p>Laporan Inspeksi</p>
+                <span class="caret"></span>
+              </a>
+              <div class="collapse" id="laporan">
+                <ul class="nav nav-collapse">
+                  <li>
+                    <a href="laporan.php">
+                      <span class="sub-item">Laporan Inspeksi Apar</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="laporanhydrant.php">
+                      <span class="sub-item">Laporan Inspeksi Hydrant</span>
+                    </a>
+                  </li>
 
-                            </a>
-                        </li>
+                </ul>
+              </div>
+            </li>
 
 
                         <li class="nav-item">
@@ -336,10 +356,7 @@ if (!isset($_SESSION['username'])) {
                                             </div>
                                         </div>
                                     </li>
-                                    <li>
-                                        <a class="see-all" href="../notif.php">See all notifications<i class="fa fa-angle-right"></i>
-                                        </a>
-                                    </li>
+                           
                                 </ul>
                             </li>
                             <?php

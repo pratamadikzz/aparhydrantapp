@@ -3,10 +3,13 @@ session_start();
 
 // Cek apakah pengguna sudah login atau belum
 if (!isset($_SESSION['username'])) {
-    // Jika belum login, arahkan ke login.php
-    header("Location: ../login.php");
-    exit();
+  // Jika belum login, arahkan ke login.php
+  header("Location: ../login.php");
+  exit();
 }
+
+// Ambil level pengguna dari session
+$user_level = $_SESSION['level'] ?? 'guest'; // Default ke 'guest' jika tidak ada level
 
 // Tambahkan kode lainnya untuk index.php di bawah sini
 ?>
@@ -17,9 +20,9 @@ if (!isset($_SESSION['username'])) {
 
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>Cek Apar - Jenis Apar</title>
+    <title>Cek Apar | Hydrant - Jenis Apar</title>
     <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
-    <link rel="icon" href="../assets/img/logokecil.png" type="image/x-icon" />
+    <link rel="icon" href="../assets/img/logokecilAH.png" type="image/x-icon" />
 
     <!-- Fonts and icons -->
     <script src="../assets/js/plugin/webfont/webfont.min.js"></script>
@@ -61,7 +64,7 @@ if (!isset($_SESSION['username'])) {
                 <!-- Logo Header -->
                 <div class="logo-header" data-background-color="dark">
                     <a href="../index.php" class="logo">
-                        <img src="../assets/img/logo.png" alt="navbar brand" class="navbar-brand" height="200px" width="200px" />
+                    <img src="../assets/img/logoAH.png" alt="navbar brand" class="navbar-brand" height="200px" width="200px" />
                     </a>
                     <div class="nav-toggle">
                         <button class="btn btn-toggle toggle-sidebar">
@@ -78,97 +81,103 @@ if (!isset($_SESSION['username'])) {
                 <!-- End Logo Header -->
             </div>
             <div class="sidebar-wrapper scrollbar scrollbar-inner">
-                <div class="sidebar-content">
-                    <ul class="nav nav-secondary">
-                        <li class="nav-item active">
+        <div class="sidebar-content">
+          <ul class="nav nav-secondary">
+            <li class="nav-item active">
 
-                        <li class="nav-item">
-                            <a href="../index.php">
-                                <i class="fas fa-home"></i>
-                                <p>Dashboard</p>
+            <li class="nav-item">
+              <a href="../index.php">
+                <i class="fas fa-home"></i>
+                <p>Dashboard</p>
 
-                            </a>
-                        </li>
-                        </li>
-                        <li class="nav-section">
-                            <span class="sidebar-mini-icon">
-                                <i class="fa fa-ellipsis-h"></i>
-                            </span>
-                            <h4 class="text-section">Menu</h4>
-                        </li>
-                        <li class="nav-item">
-                            <a href="scan.php">
-                                <i class="fa-solid fa-qrcode"></i>
-                                <p>Scan Code</p>
+              </a>
+            </li>
+            </li>
+            <li class="nav-section">
+              <span class="sidebar-mini-icon">
+                <i class="fa fa-ellipsis-h"></i>
+              </span>
+              <h4 class="text-section">Menu</h4>
+            </li>
+            <li class="nav-item">
+              <a href="scan.php">
+                <i class="fa-solid fa-qrcode"></i>
+                <p>Scan Code</p>
 
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="user.php">
-                                <i class="fas fa-address-card"></i>
-                                <p>Data Pengguna</p>
+              </a>
+            </li>
+            <?php if ($user_level === 'admin'): ?>
+            <li class="nav-item">
+              <a href="user.php">
+                <i class="fas fa-address-card"></i>
+                <p>Data Pengguna</p>
 
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a data-toggle="collapse" href="#apar" aria-expanded="false" aria-controls="apar">
-                            <i class="fa-solid fa-fire-extinguisher"></i>
-                                <p>Data Master Apar</p>
-                                <span class="caret"></span>
-                            </a>
-                            <div class="collapse" id="apar">
-                                <ul class="nav nav-collapse">
-                                    <li>
-                                        <a href="apar.php">
-                                            <span class="sub-item">Data Apar</span>
-                                        </a>
-                                    </li>
-                                    <li>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a data-toggle="collapse" href="#apar" aria-expanded="false" aria-controls="apar">
+                <i class="fa-solid fa-database"></i>
+                <p>Data Master</p>
+                <span class="caret"></span>
+              </a>
+              <div class="collapse" id="apar">
+                <ul class="nav nav-collapse">
+                <li>
+                    <a href="hydrant.php">
+                      <span class="sub-item">Data Hydrant</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="apar.php">
+                      <span class="sub-item">Data Apar</span>
+                    </a>
+                  </li>
+                  <li>
                     <a href="apar_mobil.php">
                       <span class="sub-item">Data Apar Mobil</span>
                     </a>
                   </li>
-                                    <li class="active">
-                                        <a href="jenis_apar.php">
-                                            <span class="sub-item">Jenis Apar</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                       
+                  <li class="active">
+                    <a href="jenis_apar.php">
+                      <span class="sub-item">Jenis Apar</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </li>
 
 
 
-                        <li class="nav-item">
-                            <a data-toggle="collapse" href="#area" aria-expanded="false" aria-controls="area">
-                                <i class="fas fa-map-marker-alt"></i>
-                                <p>Area Apar</p>
-                                <span class="caret"></span>
-                            </a>
-                            <div class="collapse" id="area">
-                                <ul class="nav nav-collapse">
-                                    <li>
-                                        <a href="lokasi.php">
-                                            <span class="sub-item">Lokasi</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="departemen.php">
-                                            <span class="sub-item">Departemen</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li class="nav-item">
+
+            <li class="nav-item">
+              <a data-toggle="collapse" href="#area" aria-expanded="false" aria-controls="area">
+                <i class="fas fa-map-marker-alt"></i>
+                <p>Area Apar</p>
+                <span class="caret"></span>
+              </a>
+              <div class="collapse" id="area">
+                <ul class="nav nav-collapse">
+                  <li>
+                    <a href="lokasi.php">
+                      <span class="sub-item">Lokasi</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="departemen.php">
+                      <span class="sub-item">Departemen</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </li>
+            <li class="nav-item">
               <a href="activity.php">
               <i class="fa-solid fa-clock-rotate-left"></i>
                 <p>Aktivitas Pengguna</p>
 
               </a>
             </li>
-                        <li class="nav-item">
+            <li class="nav-item">
                             <a href="calender-exp.php">
                                 <i class="fa-regular fa-calendar"></i>
                                 <p>Kalender Apar</p>
@@ -177,32 +186,48 @@ if (!isset($_SESSION['username'])) {
                         </li>
 
 
-                        <li class="nav-item">
-                            <a href="agenda.php">
-                                <i class="fa-solid fa-calendar-xmark"></i>
-                                <p>Agenda Inspeksi</p>
+            <li class="nav-item">
+              <a href="agenda.php">
+                <i class="fa-solid fa-calendar-xmark"></i>
+                <p>Agenda Inspeksi</p>
 
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="laporan.php">
-                                <i class="fa-solid fa-bullhorn"></i>
-                                <p>Laporan Inspeksi</p>
+              </a>
+            </li>
+            <?php endif; ?>
+            <li class="nav-item">
+              <a data-bs-toggle="collapse" href="#laporan">
+                <i class="fa-solid fa-bullhorn"></i>
+                <p>Laporan Inspeksi</p>
+                <span class="caret"></span>
+              </a>
+              <div class="collapse" id="laporan">
+                <ul class="nav nav-collapse">
+                  <li>
+                    <a href="laporan.php">
+                      <span class="sub-item">Laporan Inspeksi Apar</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="laporanhydrant.php">
+                      <span class="sub-item">Laporan Inspeksi Hydrant</span>
+                    </a>
+                  </li>
 
-                            </a>
-                        </li>
+                </ul>
+              </div>
+            </li>
 
 
-                        <li class="nav-item">
-                            <a href="logout.php">
-                                <i class="fas fa-door-open"></i>
-                                <p>Log out</p>
+            <li class="nav-item">
+              <a href="logout.php">
+                <i class="fas fa-door-open"></i>
+                <p>Log out</p>
 
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
         </div>
         <!-- End Sidebar -->
 
@@ -212,7 +237,7 @@ if (!isset($_SESSION['username'])) {
                     <!-- Logo Header -->
                     <div class="logo-header" data-background-color="dark">
                         <a href="../index.php" class="logo">
-                            <img src="../assets/img/logo.png" alt="navbar brand" class="navbar-brand" height="200px" width="200px" />
+                        <img src="../assets/img/logoAH.png" alt="navbar brand" class="navbar-brand" height="200px" width="200px" />
                         </a>
                         <div class="nav-toggle">
                             <button class="btn btn-toggle toggle-sidebar">
@@ -369,10 +394,7 @@ if (!isset($_SESSION['username'])) {
                                             </div>
                                         </div>
                                     </li>
-                                    <li>
-                                        <a class="see-all" href="../notif.php">See all notifications<i class="fa fa-angle-right"></i>
-                                        </a>
-                                    </li>
+                                   
                                 </ul>
                             </li>
                             <?php
@@ -441,148 +463,293 @@ if (!isset($_SESSION['username'])) {
 
                     <div class="row">
                         <div class="col-lg-12 grid-margin">
-                            <div class="center-button">
-                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalScrollable">
-                                    Tambah Jenis Apar
-                                </button>
-                            </div>
+                            <div class="center-button" style="text-align:center; margin:20px 0;">
+  <button type="button" class="btn btn-add-apar"data-toggle="modal" data-target="#exampleModalScrollable">
+    Tambah Jenis Apar
+  </button>
+</div>
+
+<style>
+.btn-add-apar {
+  background: linear-gradient(135deg, #FF6347, #FF4500);
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  padding: 10px 25px;
+  font-size: 16px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 15px rgba(255,99,71,0.4);
+}
+
+.btn-add-apar:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(255,99,71,0.55);
+  background: linear-gradient(135deg, #FF4500, #FF6347);
+}
+</style>
+
                             <div class="card">
 
                                 <div class="card-body">
                                     <div class="table-responsive">
                                         <table id="example" class="display" style="width:100%">
-                                            <thead>
-                                                <tr>
-                                                    <th style="background-color:yellow;">No</th>
-                                                    <th style="background-color:yellow;">Jenis Apar</th>
-                                                    <th style="background-color:yellow;">Aksi</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody style="background-color:white;">
-                                                <?php
-                                                include('../koneksi.php');
-                                                $user = isset($_SESSION['username']) ? $_SESSION['username'] : null;
+    <thead>
+        <tr style="background: linear-gradient(135deg, #FF6347, #FF4500); color: #fff;">
+            <th>No</th>
+            <th>Jenis Apar</th>
+            <th>Aksi</th>
+        </tr>
+    </thead>
+    <tbody style="background-color:#fff;">
+        <?php
+        include('../koneksi.php');
+        $user = isset($_SESSION['username']) ? $_SESSION['username'] : null;
+        if ($user) {
+            $user_query = "SELECT * FROM user WHERE username='$user'";
+            $user_result = mysqli_query($koneksi, $user_query);
+            $user_details = mysqli_fetch_assoc($user_result);
+        } else { die("No user is logged in."); }
 
-                                                if ($user) {
-                                                    // Query to get details of the logged-in user
-                                                    $user_query = "SELECT * FROM user WHERE username='$user'";
-                                                    $user_result = mysqli_query($koneksi, $user_query);
+        $query = "SELECT * FROM jenis_apar ORDER BY id ASC";
+        $result = mysqli_query($koneksi, $query);
+        $no = 1;
+        date_default_timezone_set('Asia/Jakarta');
+        $days = array(
+            'Sunday'=>'Minggu','Monday'=>'Senin','Tuesday'=>'Selasa','Wednesday'=>'Rabu',
+            'Thursday'=>'Kamis','Friday'=>'Jumat','Saturday'=>'Sabtu'
+        );
+        $dayName = $days[date('l')];
 
-                                                    if (!$user_result) {
-                                                        die("Query Error: " . mysqli_error($koneksi) . "-" . mysqli_error($koneksi));
-                                                    }
+        while ($row = mysqli_fetch_assoc($result)) {
+            $edit_modal_id = "editModal".$row['id'];
+            $hapus_modal_id = "hapusModal".$row['id'];
+        ?>
+        <tr style="text-align:center;">
+            <td><?php echo $no; ?></td>
+            <td><?php echo $row['jenis_apar']; ?></td>
+            <td>
+                <button type="button" class="btn btn-edit" data-toggle="modal" data-target="#<?php echo $edit_modal_id; ?>">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </button>
+                <button type="button" class="btn btn-delete" data-toggle="modal" data-target="#<?php echo $hapus_modal_id; ?>">
+                    <i class="fa-solid fa-trash-can"></i>
+                </button>
+            </td>
+        </tr>
 
-                                                    $user_details = mysqli_fetch_assoc($user_result);
-                                                } else {
-                                                    die("No user is logged in.");
-                                                }
-
-                                                $query = "SELECT * FROM jenis_apar ORDER BY id ASC";
-                                                $result = mysqli_query($koneksi, $query);
-                                                if (!$result) {
-                                                    die("query error: " . mysqli_error($koneksi) . "-" . mysqli_error($koneksi));
-                                                }
-                                                date_default_timezone_set('Asia/Jakarta');
-                                                $days = array(
-                                                    'Sunday' => 'Minggu',
-                                                    'Monday' => 'Senin',
-                                                    'Tuesday' => 'Selasa',
-                                                    'Wednesday' => 'Rabu',
-                                                    'Thursday' => 'Kamis',
-                                                    'Friday' => 'Jumat',
-                                                    'Saturday' => 'Sabtu'
-                                                );
-    
-                                                $dayName = $days[date('l')];
-    
-                                                    $no = 1;
-                                                while ($row = mysqli_fetch_assoc($result)) {
-                                                    $edit_modal_id = "editModal" . $row['id']; // ID modal yang unik
-                                                    $hapus_modal_id = "hapusModal" . $row['id']; // ID modal yang unik
-                                                ?>
-                                                    <tr align="center">
-                                                        <td style="text-align: center;"><?php echo $no; ?></td>
-                                                        <td><?php echo $row['jenis_apar']; ?></td>
-                                                        <td style="text-align: center;">
-                                                            <button type="button" class="btn btn-warning" data-toggle="modal" style="font-size: 20px;" data-target="#<?php echo $edit_modal_id; ?>"><i class="fa-solid fa-pen-to-square"></i></button>
-                                                            <button type="button" class="btn btn-danger " data-toggle="modal" style="font-size: 20px;" data-target="#<?php echo $hapus_modal_id; ?>"> <i class="fa-solid fa-trash-can"></i></i></button>
-                                                        </td>
-                                                    </tr>
-                                                    <div class="modal fade" id="<?php echo $edit_modal_id; ?>" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
-                                                        <div class="modal-dialog" role="document">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <h5 class="modal-title" id="editModalLabel">Edit Data</h5>
-                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                        <span aria-hidden="true">&times;</span>
-                                                                    </button>
-                                                                </div>
-                                                                <div class="modal-body">
-                                                                    <form class="needs-validation" action="proses/jenis/proses_edit_jenis.php" method="post">
-                                                                        <div class="row">
-                                                                            <div class="col-md-12 mb-3">
-                                                                                <label for="firstName">Jenis Apar</label>
-                                                                                <input type="text" class="form-control" name="lokasi" id="firstName" placeholder="" value="<?php echo $row['jenis_apar']; ?>" required="">
-                                                                                <input type="hidden" name="id" value="<?php echo $row['id']; ?>" />
-                                                                                <input type="hidden" name="activity" id="activity" value="<?php echo $user_details['nama'] ?> Telah Melakukan Pengeditan Jenis Apar ">
-                                                                                <input type="hidden" name="tanggal" id="tanggal" value="<?php echo $dayName . ', ' . date('d-m-Y H:i:s') ?>">
-                                                                                <div class="invalid-feedback">
-                                                                                    Valid first name is required.
-                                                                                </div>
-                                                                            </div>
+        <!-- Edit Modal -->
+       <!-- Edit Modal Premium Ultra -->
+<div class="modal fade" id="<?php echo $edit_modal_id; ?>" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+    <div class="modal-content premium-ultra-modal">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="fas fa-edit mr-2"></i>Edit Data</h5>
+        <button type="button" class="close text-white" data-dismiss="modal"><span>&times;</span></button>
+      </div>
+      <div class="modal-body">
+        <form class="needs-validation" action="proses/jenis/proses_edit_jenis.php" method="post">
+          <div class="form-group">
+            <label>Jenis Apar</label>
+            <input type="text" class="form-control glass-input" name="lokasi" value="<?php echo $row['jenis_apar']; ?>" required>
+            <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
+            <input type="hidden" name="activity" value="<?php echo $user_details['nama']; ?> Telah Melakukan Pengeditan Jenis Apar ">
+            <input type="hidden" name="tanggal" value="<?php echo $dayName . ', ' . date('d-m-Y H:i:s'); ?>">
+          </div>
+          <div class="modal-footer justify-content-center">
+            <button type="button" class="btn btn-secondary glass-btn" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary glow-btn">Save changes</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 
 
+<!-- CSS Premium Ultra -->
+<style>
+.premium-ultra-modal {
+  border-radius: 20px;
+  background: rgba(30,30,30,0.9);
+  backdrop-filter: blur(15px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+  border: 1px solid rgba(255,255,255,0.1);
+  transform: translateY(-50px);
+  opacity: 0;
+  animation: slideDownUltra 0.5s forwards;
+}
 
+@keyframes slideDownUltra {
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
 
-                                                                        </div>
+.premium-ultra-modal .modal-header {
+  background: linear-gradient(135deg,#FF4500,#FF7F50);
+  border-bottom: none;
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.3rem;
+  letter-spacing: 0.5px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
 
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                                    <button type="submit" class="btn btn-primary">Save changes</button>
-                                                                </div>
-                                                                </form>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="modal fade" id="<?php echo $hapus_modal_id; ?>" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
-                                                        <div class="modal-dialog" role="document">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <h5 class="modal-title" id="editModalLabel">Edit Data</h5>
-                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                        <span aria-hidden="true">&times;</span>
-                                                                    </button>
-                                                                </div>
-                                                                <div class="modal-body">
-                                                                    <form class="needs-validation" action="proses/jenis/proses_hapus.php" method="post">
-                                                                        <div class="row">
-                                                                            <div class="col-md-12 mb-3">
-                                                                                <label for="firstName">APAKAH ANDA YAKIN HAPUS?</label>
-                                                                                <input type="hidden" class="form-control" name="id" id="id" placeholder="" value="<?php echo $row['id']; ?>" required="">
-                                                                                <div class="invalid-feedback">
-                                                                                    Valid first name is required.
-                                                                                </div>
-                                                                            </div>
-                                                                            <input type="hidden" name="activity" id="activity" value="<?php echo $user_details['nama'] ?> Telah Melakukan Penghapusan Jenis Apar ">
-                                                                            <input type="hidden" name="tanggal" id="tanggal" value="<?php echo $dayName . ', ' . date('d-m-Y H:i:s') ?>">
+.premium-ultra-modal .modal-body label {
+  color: #fff;
+  font-weight: 500;
+}
 
-                                                                        </div>
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                                    <button type="submit" class="btn btn-primary">Save changes</button>
-                                                                </div>
-                                                                </form>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                <?php
-                                                    $no++;
-                                                }
-                                                ?>
-                                            </tbody>
-                                        </table>
+.glass-input {
+  border-radius: 12px;
+  background: rgba(255,255,255,0.05);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.2);
+  backdrop-filter: blur(10px);
+  padding: 0.6rem 1rem;
+  transition: all 0.3s ease;
+}
+
+.glass-input:focus {
+  border-color: #FF6347;
+  box-shadow: 0 0 15px rgba(255,99,71,0.5);
+  outline: none;
+}
+
+.glow-btn {
+  border-radius: 50px;
+  padding: 0.6rem 2.5rem;
+  font-weight: 600;
+  box-shadow: 0 0 15px rgba(255,255,255,0.2);
+  transition: all 0.3s ease;
+}
+
+.glow-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 25px rgba(255,255,255,0.6), 0 12px 25px rgba(0,0,0,0.5);
+}
+
+.btn-primary.glow-btn {
+  background: linear-gradient(135deg,#FF6347,#FF4500);
+  border: none;
+  color: #fff;
+}
+
+.btn-secondary.glass-btn {
+  background: rgba(255,255,255,0.1);
+  border: none;
+  color: #fff;
+  backdrop-filter: blur(10px);
+}
+</style>
+
+        </div>
+
+        <!-- Hapus Modal Super Premium -->
+<div class="modal fade" id="<?php echo $hapus_modal_id; ?>" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+    <div class="modal-content super-premium-modal">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="fas fa-exclamation-triangle mr-2"></i>Hapus Data</h5>
+        <button type="button" class="close text-white" data-dismiss="modal"><span>&times;</span></button>
+      </div>
+      <div class="modal-body text-center">
+        <p>Apakah Anda yakin ingin menghapus data ini?</p>
+        <form class="needs-validation" action="proses/jenis/proses_hapus.php" method="post">
+          <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
+          <input type="hidden" name="activity" value="<?php echo $user_details['nama']; ?> Telah Melakukan Penghapusan Jenis Apar ">
+          <input type="hidden" name="tanggal" value="<?php echo $dayName . ', ' . date('d-m-Y H:i:s'); ?>">
+          <div class="modal-footer justify-content-center">
+            <button type="button" class="btn btn-secondary glow-btn" data-dismiss="modal">Batal</button>
+            <button type="submit" class="btn btn-danger glow-btn">Hapus</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CSS Super Premium -->
+<style>
+.super-premium-modal {
+  border-radius: 20px;
+  background: rgba(30,30,30,0.95);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 25px 50px rgba(0,0,0,0.6);
+  border: 1px solid rgba(255,255,255,0.1);
+  transform: translateY(-50px);
+  opacity: 0;
+  animation: slideDown 0.4s forwards;
+}
+
+@keyframes slideDown {
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.super-premium-modal .modal-header {
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+  border-bottom: none;
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.2rem;
+  letter-spacing: 0.5px;
+}
+
+.super-premium-modal .modal-body p {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #fff;
+  margin-bottom: 2rem;
+}
+
+.glow-btn {
+  border-radius: 50px;
+  padding: 0.6rem 2.5rem;
+  font-weight: 600;
+  box-shadow: 0 0 12px rgba(255,255,255,0.2);
+  transition: all 0.3s ease;
+}
+
+.glow-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 20px rgba(255,255,255,0.5), 0 12px 25px rgba(0,0,0,0.5);
+}
+
+.btn-danger.glow-btn {
+  background: linear-gradient(135deg, #ff4b5c, #c0392b);
+  border: none;
+  color: #fff;
+}
+
+.btn-secondary.glow-btn {
+  background: linear-gradient(135deg, #7f8c8d, #34495e);
+  border: none;
+  color: #fff;
+}
+</style>
+
+        </div>
+
+        <?php $no++; } ?>
+    </tbody>
+</table>
+
+<style>
+#example th { text-align:center; font-weight:600; }
+#example td { text-align:center; vertical-align: middle; }
+.btn-edit { background: #FFC107; border:none; border-radius:6px; padding:6px 12px; color:#fff; margin-right:5px; transition:0.3s; }
+.btn-edit:hover { transform:translateY(-2px); box-shadow:0 4px 8px rgba(0,0,0,0.2); }
+.btn-delete { background: #dc3545; border:none; border-radius:6px; padding:6px 12px; color:#fff; transition:0.3s; }
+.btn-delete:hover { transform:translateY(-2px); box-shadow:0 4px 8px rgba(0,0,0,0.2); }
+.modal-content { border-radius:10px; overflow:hidden; }
+.modal-header { font-weight:600; }
+.modal-footer .btn { border-radius:30px; padding:8px 20px; font-weight:600; }
+</style>
+
                                     </div>
                                 </div>
                             </div>

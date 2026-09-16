@@ -8,6 +8,9 @@ if (!isset($_SESSION['username'])) {
   exit();
 }
 
+// Ambil level pengguna dari session
+$user_level = $_SESSION['level'] ?? 'guest'; // Default ke 'guest' jika tidak ada level
+
 // Tambahkan kode lainnya untuk index.php di bawah sini
 ?>
 <!DOCTYPE html>
@@ -15,9 +18,9 @@ if (!isset($_SESSION['username'])) {
 
 <head>
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Cek Apar - Data Apar</title>
+  <title>Cek Apar | Hydrant  - Data Apar</title>
   <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
-  <link rel="icon" href="../assets/img/logokecil.png" type="image/x-icon" />
+  <link rel="icon" href="../assets/img/logokecilAH.png" type="image/x-icon" />
 
   <!-- Fonts and icons -->
   <script src="../assets/js/plugin/webfont/webfont.min.js"></script>
@@ -60,7 +63,7 @@ if (!isset($_SESSION['username'])) {
         <!-- Logo Header -->
         <div class="logo-header" data-background-color="dark">
           <a href="../index.php" class="logo">
-            <img src="../assets/img/logo.png" alt="navbar brand" class="navbar-brand" height="200px" width="200px" />
+          <img src="../assets/img/logoAH.png" alt="navbar brand" class="navbar-brand" height="200px" width="200px" />
           </a>
           <div class="nav-toggle">
             <button class="btn btn-toggle toggle-sidebar">
@@ -102,6 +105,7 @@ if (!isset($_SESSION['username'])) {
 
               </a>
             </li>
+            <?php if ($user_level === 'admin'): ?>
             <li class="nav-item">
               <a href="user.php">
                 <i class="fas fa-address-card"></i>
@@ -111,12 +115,17 @@ if (!isset($_SESSION['username'])) {
             </li>
             <li class="nav-item">
               <a data-toggle="collapse" href="#apar" aria-expanded="false" aria-controls="apar">
-                <i class="fa-solid fa-fire-extinguisher"></i>
-                <p>Data Master Apar</p>
+                <i class="fa-solid fa-database"></i>
+                <p>Data Master</p>
                 <span class="caret"></span>
               </a>
               <div class="collapse" id="apar">
                 <ul class="nav nav-collapse">
+                <li>
+                    <a href="hydrant.php">
+                      <span class="sub-item">Data Hydrant</span>
+                    </a>
+                  </li>
                   <li >
                     <a href="apar.php">
                       <span class="sub-item">Data Apar</span>
@@ -183,12 +192,28 @@ if (!isset($_SESSION['username'])) {
 
               </a>
             </li>
+            <?php endif; ?>
             <li class="nav-item">
-              <a href="laporan.php">
+              <a data-bs-toggle="collapse" href="#laporan">
                 <i class="fa-solid fa-bullhorn"></i>
                 <p>Laporan Inspeksi</p>
-
+                <span class="caret"></span>
               </a>
+              <div class="collapse" id="laporan">
+                <ul class="nav nav-collapse">
+                  <li>
+                    <a href="laporan.php">
+                      <span class="sub-item">Laporan Inspeksi Apar</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="laporanhydrant.php">
+                      <span class="sub-item">Laporan Inspeksi Hydrant</span>
+                    </a>
+                  </li>
+
+                </ul>
+              </div>
             </li>
 
 
@@ -211,7 +236,7 @@ if (!isset($_SESSION['username'])) {
           <!-- Logo Header -->
           <div class="logo-header" data-background-color="dark">
             <a href="../index.php" class="logo">
-              <img src="../assets/img/logo.png" alt="navbar brand" class="navbar-brand" height="200px" width="200px" />
+            <img src="../assets/img/logoAH.png" alt="navbar brand" class="navbar-brand" height="200px" width="200px" />
             </a>
             <div class="nav-toggle">
               <button class="btn btn-toggle toggle-sidebar">
@@ -369,10 +394,7 @@ if (!isset($_SESSION['username'])) {
                       </div>
                     </div>
                   </li>
-                  <li>
-                    <a class="see-all" href="../notif.php">See all notifications<i class="fa fa-angle-right"></i>
-                    </a>
-                  </li>
+              
                 </ul>
               </li>
               <?php
@@ -441,19 +463,72 @@ if (!isset($_SESSION['username'])) {
           <div class="row">
             <div class="col-lg-12 grid-margin">
               <div class="center-button">
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalScrollable">
-                  Tambah Apar
-                </button>
+               <button type="button" class="btn btn-apar" data-toggle="modal" data-target="#exampleModalScrollable">
+  + Tambah Apar
+</button>
+
+<style>
+.btn-apar {
+  background: linear-gradient(145deg, #B22222, #FF4500);
+  color: white;
+  font-weight: 600;
+  padding: 10px 25px;
+  border-radius: 50px;
+  border: none;
+  box-shadow: 0 6px 18px rgba(178,34,34,0.4);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.btn-apar:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(178,34,34,0.6);
+  background: linear-gradient(145deg, #FF6347, #B22222);
+}
+</style>
+
                 <div>
 
 
                 </div>
-                <a href="export.php" target="_blank" class="btn btn-info btn-icon-split" style="margin-left: 20px;">
-                  <span class="icon text-white-55">
-                    <i class="fas fa-print"></i>
-                  </span>
-                  <span class="text">Export Data Apar</span>
-                </a>
+                <a href="proses/export/export.php" target="_blank" class="btn btn-export-apar">
+  <span class="icon">
+    <i class="fas fa-print"></i>
+  </span>
+  <span class="text">Export Data Apar</span>
+</a>
+
+<style>
+.btn-export-apar {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(145deg, #1E90FF, #00BFFF);
+  color: white;
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: 50px;
+  text-decoration: none;
+  box-shadow: 0 6px 18px rgba(30,144,255,0.4);
+  transition: all 0.3s ease;
+  font-size: 15px;
+}
+
+.btn-export-apar:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(30,144,255,0.6);
+  background: linear-gradient(145deg, #00BFFF, #1E90FF);
+}
+
+.btn-export-apar .icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+</style>
+
 
               </div>
               <div class="card">
@@ -567,7 +642,7 @@ $apar_id = $row['id'];
                             <td><?php echo $row['berat']; ?></td>
                             <td style="text-align: center;">
                               <div class="btn-group">
-                                <a title="scan" class="btn btn-primary" style="font-size: 20px;" href="generate.php?code=<?php echo $row['code_apar']; ?>"><i class="fa-solid fa-qrcode"></i></a>
+                                <a title="scan" class="btn btn-primary" style="font-size: 20px;" href="proses/generate/generatemobil.php?code=<?php echo $row['code_apar']; ?>"><i class="fa-solid fa-qrcode"></i></a>
                                 <button type="button" class="btn btn-warning" data-toggle="modal" style="font-size: 20px;" data-target="#<?php echo $edit_modal_id; ?>"><i class=" fa-solid fa-pen-to-square"></i></button>
                                 <button type="button" class="btn btn-danger " data-toggle="modal" style="font-size: 20px;" data-target="#<?php echo $hapus_modal_id; ?>"> <i class="fa-solid fa-trash-can"></i></i></button>
                               </div>
@@ -805,47 +880,124 @@ $apar_id = $row['id'];
                                                                         <input type="hidden" name="tanggal" id="tanggal" value="<?php echo $dayName . ', ' . date('d-m-Y H:i:s') ?>">
                                   
                                 </div>
-                                <div class="modal-footer">
-                                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                  <button type="submit" class="btn btn-primary">Save changes</button>
-                                </div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-close" data-dismiss="modal"></button>
+  <button type="submit" class="btn btn-save">Save changes</button>
+</div>
+
+<style>
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 15px 20px;
+  background-color: #f8f9fa;
+}
+
+.btn-close {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  padding: 8px 20px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.btn-close:hover {
+  background-color: #5a6268;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+}
+
+.btn-save {
+  background: linear-gradient(135deg, #FF4500, #FF6347);
+  color: white;
+  border: none;
+  border-radius: 25px;
+  padding: 8px 25px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 14px rgba(255,99,71,0.3);
+}
+
+.btn-save:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(255,99,71,0.45);
+  background: linear-gradient(135deg, #FF6347, #FF4500);
+}
+</style>
+
                                 </form>
                               </div>
                             </div>
                           </div>
                           <div class="modal fade" id="<?php echo $hapus_modal_id; ?>" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
-                                                    <div class="modal-dialog" role="document">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title" id="editModalLabel">Edit Data</h5>
-                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                    <span aria-hidden="true">&times;</span>
-                                                                </button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <form class="needs-validation" action="proses/apar/proses_hapus.php" method="post">
-                                                                    <div class="row">
-                                                                        <div class="col-md-12 mb-3">
-                                                                            <label for="firstName">APAKAH ANDA YAKIN HAPUS?</label>
-                                                                            <input type="hidden" class="form-control" name="id" id="id" placeholder="" value="<?php echo $row['id']; ?>" required="">
-                                                                            <div class="invalid-feedback">
-                                                                                Valid first name is required.
-                                                                            </div>
-                                                                        </div>
-                                                                        <input type="hidden" name="code_apar" id="code_apar" value="<?php echo $row['code_apar']; ?>">
-                                                                        <input type="hidden" name="activity" id="activity" value="<?php echo $user_details['nama'] ?> Telah Melakukan Penghapusan Apar  ">
-                                                                        <input type="hidden" name="tanggal" id="tanggal" value="<?php echo $dayName . ', ' . date('d-m-Y H:i:s') ?>">
+                                                   <div class="modal-dialog" role="document">
+  <div class="modal-content">
+    <div class="modal-header" style="background: linear-gradient(135deg, #FF6347, #FF4500); color: #fff;">
+      <h5 class="modal-title" id="editModalLabel">Hapus Data</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color:#fff;">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form class="needs-validation" action="proses/apar/proses_hapus_mobil.php" method="post">
+        <div class="row">
+          <div class="col-md-12 mb-3">
+            <label for="firstName" style="font-weight:600; color:#333;">APAKAH ANDA YAKIN HAPUS?</label>
+            <input type="hidden" class="form-control" name="id" id="id" value="<?php echo $row['id']; ?>" required>
+          </div>
+          <input type="hidden" name="code_apar" id="code_apar" value="<?php echo $row['code_apar']; ?>">
+          <input type="hidden" name="activity" id="activity" value="<?php echo $user_details['nama'] ?> Telah Melakukan Penghapusan Apar">
+          <input type="hidden" name="tanggal" id="tanggal" value="<?php echo $dayName . ', ' . date('d-m-Y H:i:s') ?>">
+        </div>
+    </div>
+    <div class="modal-footer" style="background-color:#f9f9f9; justify-content:flex-end; gap:12px;">
+      <button type="button" class="btn btn-close" data-dismiss="modal"></button>
+      <button type="submit" class="btn btn-delete">Hapus</button>
+    </div>
+      </form>
+  </div>
+</div>
 
-                                                                    </div>
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                                <button type="submit" class="btn btn-primary">Save changes</button>
-                                                            </div>
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                                </div>
+<style>
+.btn-close {
+  background-color: #6c757d;
+  color: #fff;
+  border: none;
+  border-radius: 25px;
+  padding: 8px 20px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.btn-close:hover {
+  background-color: #5a6268;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+}
+
+.btn-delete {
+  background: linear-gradient(135deg, #FF4500, #FF6347);
+  color: #fff;
+  border: none;
+  border-radius: 25px;
+  padding: 8px 25px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 14px rgba(255,99,71,0.3);
+}
+
+.btn-delete:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(255,99,71,0.45);
+  background: linear-gradient(135deg, #FF6347, #FF4500);
+}
+</style>
+
                         <?php
                           $no++;
                         }
@@ -1136,10 +1288,55 @@ if ($result->num_rows > 0) {
             }
             ?>
           </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-primary">Save changes</button>
-          </div>
+        <div class="modal-footer">
+  <button type="button" class="btn btn-close" data-dismiss="modal"></button>
+  <button type="submit" class="btn btn-save">Save changes</button>
+</div>
+
+<style>
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 15px 20px;
+  background-color: #f9f9f9; /* sedikit lembut */
+}
+
+.btn-close {
+  background-color: #6c757d;
+  color: #fff;
+  border: none;
+  border-radius: 25px;
+  padding: 8px 20px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.btn-close:hover {
+  background-color: #5a6268;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+}
+
+.btn-save {
+  background: linear-gradient(135deg, #FF6347, #FF4500);
+  color: #fff;
+  border: none;
+  border-radius: 25px;
+  padding: 8px 25px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 14px rgba(255,99,71,0.3);
+}
+
+.btn-save:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(255,99,71,0.45);
+  background: linear-gradient(135deg, #FF4500, #FF6347);
+}
+</style>
+
         </form>
       </div>
     </div>

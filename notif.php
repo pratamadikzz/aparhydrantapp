@@ -4,9 +4,12 @@ session_start();
 // Cek apakah pengguna sudah login atau belum
 if (!isset($_SESSION['username'])) {
   // Jika belum login, arahkan ke login.php
-  header("Location: login.php");
+  header("Location: ../login.php");
   exit();
 }
+
+// Ambil level pengguna dari session
+$user_level = $_SESSION['level'] ?? 'guest'; // Default ke 'guest' jika tidak ada level
 
 // Tambahkan kode lainnya untuk index.php di bawah sini
 ?>

@@ -1,5 +1,12 @@
 <?php
-include ('../../../koneksi.php');
+
+//proses_scan.php
+
+
+
+include('../../../koneksi.php');
+
+$day = date('Y-m-d');
 
 // Retrieve POST data
 $id = $_POST['id'];
@@ -20,6 +27,7 @@ $catridge = $_POST['catridge'];
 $pin = $_POST['pin'];
 $handle = $_POST['handle'];
 $berat = $_POST['berat'];
+$plat_nomer = $_POST['platNomor'];
 
 // Additional data for events table
 $nama = $_POST['nama'];
@@ -47,20 +55,31 @@ $query1 = "UPDATE data_apar SET
             catridge='$catridge', 
             pin='$pin', 
             handle='$handle',
-            berat='$berat' 
+            berat='$berat', 
+                 plat_nomer='$plat_nomer' 
             WHERE id='$id'";
 
 // Insert query for events table
-$query2 = "UPDATE events SET nama='$nama',keterangan='$keterangan' WHERE title='$codeApar'";
+$query2 = "INSERT INTO aktivitas (tanggal, keterangan,code_apar) VALUES ('$tanggal', '$activity','$codeApar')";
 
-// Insert query for aktivitas table
-$query3 = "INSERT INTO aktivitas (code_apar, tanggal, keterangan) VALUES ('$codeApar', '$tanggal', '$activity')";
+// Check if a report already exists for this APAR code this month
+$selectReport = "SELECT id, nama FROM laporan WHERE code_apar='$codeApar' AND MONTH(tanggal_inspeksi)=MONTH('$day') AND YEAR(tanggal_inspeksi)=YEAR('$day') LIMIT 1";
+$resultReport = mysqli_query($koneksi, $selectReport);
+if ($resultReport && mysqli_num_rows($resultReport) > 0) {
+    $existingReport = mysqli_fetch_assoc($resultReport);
+    $existingName = $existingReport['nama'];
+    $errorMessage = "Kode APAR ini sudah di-scan bulan ini oleh $existingName";
+    header("Location:../../scan.php?scan_error=" . urlencode($errorMessage));
+    exit;
+}
+
+$query3 = "INSERT INTO laporan (nama,code_apar,tanggal_inspeksi,lokasi,departemen,vendor,kondisi,masa_pemakaian,tanggal_penggantian,tanggal_refill,tanggal_expired,jenis_apar,nozzle,tabung,presure,catridge,pin,handle,berat,plat_nomer) VALUES ('$nama','$codeApar','$day','$lokasi','$departemen','$vendor','$kondisi','$masa_pemakaian','$tanggal_penggantian','$tanggal_refill','$tanggal_expired','$jenisApar','$nozzle','$tabung','$presure','$catridge','$pin','$handle','$berat','$plat_nomer')";
 
 // Execute the update query
 if (mysqli_query($koneksi, $query1)) {
     // Execute the update query for events table
     if (mysqli_query($koneksi, $query2)) {
-        // Execute the insert query for aktivitas table
+        // Execute the insert/update query for laporan table
         if (mysqli_query($koneksi, $query3)) {
             header("location:../../scan.php");
         } else {
@@ -75,4 +94,3 @@ if (mysqli_query($koneksi, $query1)) {
 
 // Close the database connection
 mysqli_close($koneksi);
-?>

@@ -1,27 +1,36 @@
 <?php
+include 'config.php';
 session_start();
 
 // Cek apakah pengguna sudah login atau belum
 if (!isset($_SESSION['username'])) {
-    // Jika belum login, arahkan ke login.php
-    header("Location: ../login.php");
-    exit();
+  // Jika belum login, arahkan ke login.php
+  header("Location: ../login.php");
+  exit();
 }
+
+// Ambil level pengguna dari session
+$user_level = $_SESSION['level'] ?? 'guest'; // Default ke 'guest' jika tidak ada level
 
 // Tambahkan kode lainnya untuk index.php di bawah sini
 ?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>Cek Apar - Laporan Inspeksi</title>
+    <title>Cek Apar | Hydrant - Laporan Inspeksi Apar</title>
     <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
-    <link rel="icon" href="../assets/img/logokecil.png" type="image/x-icon" />
+    <link rel="icon" href="../assets/img/logokecilAH.png" type="image/x-icon" />
 
     <!-- Fonts and icons -->
     <script src="../assets/js/plugin/webfont/webfont.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js"></script>
     <script>
         WebFont.load({
             google: {
@@ -59,7 +68,7 @@ if (!isset($_SESSION['username'])) {
                 <!-- Logo Header -->
                 <div class="logo-header" data-background-color="dark">
                     <a href="../index.php" class="logo">
-                        <img src="../assets/img/logo.png" alt="navbar brand" class="navbar-brand" height="200px" width="200px" />
+                    <img src="../assets/img/logoAH.png" alt="navbar brand" class="navbar-brand" height="200px" width="200px" />
                     </a>
                     <div class="nav-toggle">
                         <button class="btn btn-toggle toggle-sidebar">
@@ -76,97 +85,103 @@ if (!isset($_SESSION['username'])) {
                 <!-- End Logo Header -->
             </div>
             <div class="sidebar-wrapper scrollbar scrollbar-inner">
-                <div class="sidebar-content">
-                    <ul class="nav nav-secondary">
-                        <li class="nav-item active">
+        <div class="sidebar-content">
+          <ul class="nav nav-secondary">
+            <li class="nav-item active">
 
-                        <li class="nav-item">
-                            <a href="../index.php">
-                                <i class="fas fa-home"></i>
-                                <p>Dashboard</p>
+            <li class="nav-item">
+              <a href="../index.php">
+                <i class="fas fa-home"></i>
+                <p>Dashboard</p>
 
-                            </a>
-                        </li>
-                        </li>
-                        <li class="nav-section">
-                            <span class="sidebar-mini-icon">
-                                <i class="fa fa-ellipsis-h"></i>
-                            </span>
-                            <h4 class="text-section">Menu</h4>
-                        </li>
-                        <li class="nav-item">
-                            <a href="scan.php">
-                                <i class="fa-solid fa-qrcode"></i>
-                                <p>Scan Code</p>
+              </a>
+            </li>
+            </li>
+            <li class="nav-section">
+              <span class="sidebar-mini-icon">
+                <i class="fa fa-ellipsis-h"></i>
+              </span>
+              <h4 class="text-section">Menu</h4>
+            </li>
+            <li class="nav-item">
+              <a href="scan.php">
+                <i class="fa-solid fa-qrcode"></i>
+                <p>Scan Code</p>
 
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="user.php">
-                                <i class="fas fa-address-card"></i>
-                                <p>Data Pengguna</p>
+              </a>
+            </li>
+            <?php if ($user_level === 'admin'): ?>
+            <li class="nav-item">
+              <a href="user.php">
+                <i class="fas fa-address-card"></i>
+                <p>Data Pengguna</p>
 
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a data-toggle="collapse" href="#apar" aria-expanded="false" aria-controls="apar">
-                                <i class="fa-solid fa-fire-extinguisher"></i>
-                                <p>Data Master Apar</p>
-                                <span class="caret"></span>
-                            </a>
-                            <div class="collapse" id="apar">
-                                <ul class="nav nav-collapse">
-                                    <li>
-                                        <a href="apar.php">
-                                            <span class="sub-item">Data Apar</span>
-                                        </a>
-                                    </li>
-                                    <li>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a data-toggle="collapse" href="#apar" aria-expanded="false" aria-controls="apar">
+                <i class="fa-solid fa-database"></i>
+                <p>Data Master</p>
+                <span class="caret"></span>
+              </a>
+              <div class="collapse" id="apar">
+                <ul class="nav nav-collapse">
+                <li>
+                    <a href="hydrant.php">
+                      <span class="sub-item">Data Hydrant</span>
+                    </a>
+                  </li>
+                  <li >
+                    <a href="apar.php">
+                      <span class="sub-item">Data Apar</span>
+                    </a>
+                  </li>
+                  <li>
                     <a href="apar_mobil.php">
                       <span class="sub-item">Data Apar Mobil</span>
                     </a>
                   </li>
-                                    <li>
-                                        <a href="jenis_apar.php">
-                                            <span class="sub-item">Jenis Apar</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
+                  <li>
+                    <a href="jenis_apar.php">
+                      <span class="sub-item">Jenis Apar</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </li>
 
 
 
 
-                        <li class="nav-item">
-                            <a data-toggle="collapse" href="#area" aria-expanded="false" aria-controls="area">
-                                <i class="fas fa-map-marker-alt"></i>
-                                <p>Area Apar</p>
-                                <span class="caret"></span>
-                            </a>
-                            <div class="collapse" id="area">
-                                <ul class="nav nav-collapse">
-                                    <li>
-                                        <a href="lokasi.php">
-                                            <span class="sub-item">Lokasi</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="departemen.php">
-                                            <span class="sub-item">Departemen</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li class="nav-item">
+            <li class="nav-item">
+              <a data-toggle="collapse" href="#area" aria-expanded="false" aria-controls="area">
+                <i class="fas fa-map-marker-alt"></i>
+                <p>Area Apar</p>
+                <span class="caret"></span>
+              </a>
+              <div class="collapse" id="area">
+                <ul class="nav nav-collapse">
+                  <li>
+                    <a href="lokasi.php">
+                      <span class="sub-item">Lokasi</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="departemen.php">
+                      <span class="sub-item">Departemen</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </li>
+            <li class="nav-item">
               <a href="activity.php">
               <i class="fa-solid fa-clock-rotate-left"></i>
                 <p>Aktivitas Pengguna</p>
 
               </a>
             </li>
-                        <li class="nav-item">
+            <li class="nav-item">
                             <a href="calender-exp.php">
                                 <i class="fa-regular fa-calendar"></i>
                                 <p>Kalender Apar</p>
@@ -175,32 +190,48 @@ if (!isset($_SESSION['username'])) {
                         </li>
 
 
-                        <li class="nav-item">
-                            <a href="agenda.php">
-                                <i class="fa-solid fa-calendar-xmark"></i>
-                                <p>Agenda Inspeksi</p>
+            <li class="nav-item">
+              <a href="agenda.php">
+                <i class="fa-solid fa-calendar-xmark"></i>
+                <p>Agenda Inspeksi</p>
 
-                            </a>
-                        </li>
-                        <li class="nav-item active">
-                            <a href="laporan.php">
-                                <i class="fa-solid fa-bullhorn"></i>
-                                <p>Laporan Inspeksi</p>
+              </a>
+            </li>
+            <?php endif; ?>
+            <li class="nav-item active">
+              <a data-bs-toggle="collapse" href="#laporan">
+                <i class="fa-solid fa-bullhorn"></i>
+                <p>Laporan Inspeksi</p>
+                <span class="caret"></span>
+              </a>
+              <div class="collapse" id="laporan">
+                <ul class="nav nav-collapse">
+                  <li class="active">
+                    <a href="laporan.php">
+                      <span class="sub-item">Laporan Inspeksi Apar</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="laporanhydrant.php">
+                      <span class="sub-item">Laporan Inspeksi Hydrant</span>
+                    </a>
+                  </li>
 
-                            </a>
-                        </li>
+                </ul>
+              </div>
+            </li>
 
 
-                        <li class="nav-item">
-                            <a href="logout.php">
-                                <i class="fas fa-door-open"></i>
-                                <p>Log out</p>
+            <li class="nav-item">
+              <a href="logout.php">
+                <i class="fas fa-door-open"></i>
+                <p>Log out</p>
 
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
         </div>
         <!-- End Sidebar -->
 
@@ -210,7 +241,8 @@ if (!isset($_SESSION['username'])) {
                     <!-- Logo Header -->
                     <div class="logo-header" data-background-color="dark">
                         <a href="../index.php" class="logo">
-                            <img src="../assets/img/logo.png" alt="navbar brand" class="navbar-brand" height="200px" width="200px" />
+                        <img src="../assets/img/logoAH.png" alt="navbar brand" class="navbar-brand" height="200px" width="200px" />
+
                         </a>
                         <div class="nav-toggle">
                             <button class="btn btn-toggle toggle-sidebar">
@@ -367,10 +399,7 @@ if (!isset($_SESSION['username'])) {
                                             </div>
                                         </div>
                                     </li>
-                                    <li>
-                                        <a class="see-all" href="../notif.php">See all notifications<i class="fa fa-angle-right"></i>
-                                        </a>
-                                    </li>
+                     
                                 </ul>
                             </li>
                             <?php
@@ -424,299 +453,244 @@ if (!isset($_SESSION['username'])) {
             <script src="../assets/js/jquery.dataTables.min.js"></script>
             <link rel="stylesheet" href="../assets/css/jquery.dataTables.min.css">
             <style>
-                .center-button {
-                    display: flex;
-                    justify-content: flex-start;
-                    margin-bottom: 20px;
+                .card{
+                    display: block;
                 }
-            </style>
-            <div class="container">
-                <div class="page-inner">
-                    <br>
-                    <br>
-                    <br>
-                    <center> <a href="../export_data.php" target="_blank" class="btn btn-primary btn-icon-split">
-                            <span class="icon text-white-55">
-                                <i class="fas fa-print"></i>
-                            </span>
-                            <span class="text">Export Data</span>
-                        </a></center>
+       .folder-card {
+            max-width: 200px;
+            text-align: center;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease-in-out;
+            display: block;
+            text-decoration: none; /* Hilangkan underline */
+            color: inherit; /* Warna teks bawaan */
+        }
 
-                    <div class="row">
-                        <div class="col-lg-12 grid-margin">
-                    <br>
-                    <br>
-                    
-                            <div class="card">
+        .folder-card:hover {
+            transform: scale(1.05);
+        }
 
-                                <div class="card-body">
-                                    <div class="table-responsive">
-                                        <table id="example" class="display" style="width:100%">
-                                        <thead style="background-color:yellow;">
-                                                <tr align="center">
-                                                    <th style="background-color:yellow;"> No </th>
-                                                    <th style="background-color:yellow;"> Nama </th>
-                                                    <th style="background-color:yellow;"> Code Apar </th>
-                                                    <th style="background-color:yellow;"> Lokasi </th>
-                                                    <th style="background-color:yellow;"> Departemen </th>
-                                                    <th style="background-color:yellow;"> Tanggal Inspeksi </th>
-                                                    <th style="background-color:yellow;"> Keterangan </th>
-                                                    <th style="background-color:yellow;"> Aksi </th>
-                                                </tr>
-                                            </thead>
-                                            <tbody style="background-color:white;">
-                                            <?php
-                                            include('../koneksi.php');
+        .folder-image {
+            width: 80px;
+            height: 80px;
+            margin-top: 20px;
+        }
 
-                                            $queryevents = "
-                                            SELECT 
-                                                e.*, 
-                                           
-                                                l.lokasi, 
-                                                d.departemen 
-                                            FROM 
-                                                events e 
-                                            JOIN 
-                                                data_apar a ON e.title = a.code_apar 
-                                            JOIN 
-                                                tbl_lokasi l ON a.lokasi = l.id 
-                                            JOIN 
-                                                tbl_departemen d ON a.departemen = d.id 
-                                            ORDER BY 
-                                                e.title ASC
-                                        ";
-                                        
-                                        $resultevents = mysqli_query($koneksi, $queryevents);
-                                        
-                                        if (!$resultevents) {
-                                            die("Query error: " . mysqli_error($koneksi) . "-" . mysqli_error($koneksi));
-                                        }
-                                        
-                                        $no = 1;
-                                        while ($evs = mysqli_fetch_assoc($resultevents)) {
-                                            $edit_modal_id = "editModal" . $evs['id']; // ID modal yang unik
-                                        ?>
-                                                   <tr>
-                                                        <td style="text-align: center;"><?php echo $no; ?></td>
-                                                        <td><?php echo $evs['nama']; ?></td>
-                                                        <td><?php echo $evs['title']; ?></td>
-                                                        <td><?php echo $evs['lokasi']; ?></td>
-                                                        <td><?php echo $evs['departemen']; ?></td>
-                                                        <td><?php echo $evs['start']; ?></td>
-                                                        <td><?php echo $evs['keterangan']; ?></td>
-                                                        <td style="text-align: center;">
-                                                            <div style="display: flex; justify-content: center; gap: 10px;">
-                                                                <button type="button" class="btn btn-warning" data-toggle="modal" style="font-size: 20px;" data-target="#<?php echo $edit_modal_id; ?>">
-                                                                    <i class="fa-solid fa-pen-to-square"></i>
-                                                                </button>
-                                                                <a title="hapus" class="btn btn-danger" style="font-size: 20px;" href="proses/agenda/proses_hapus.php?id=<?php echo $evs['id']; ?>" onclick="return confirm('Anda yakin akan menghapus data ini?')">
-                                                                    <i class="fa-solid fa-trash-can"></i>
-                                                                </a>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    <div class="modal fade" id="<?php echo $edit_modal_id; ?>" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
-                                                    <div class="modal-dialog" role="document">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title" id="editModalLabel">Edit Data</h5>
-                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                    <span aria-hidden="true">&times;</span>
-                                                                </button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <form class="needs-validation" action="proses/agenda/proses_edit_laporan.php" method="post">
-                                                                    <div class="row">
-                                                                        <div class="col-md-12 mb-3">
-                                                                            <label for="firstName">Code Apar</label>
-                                                                            <input type="text" class="form-control" name="code_apar" id="firstName" placeholder="" value="<?php echo $evs['title']; ?>" disabled>
-                                                                            <input type="hidden" name="id" value="<?php echo $evs['id']; ?>" />
-                                                                            <div class="invalid-feedback">
-                                                                                Valid first name is required.
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col-md-6 mb-3">
-                                                                            <label for="firstName">Lokasi</label>
-                                                                            <input type="text" class="form-control" name="lokasi" id="firstName" placeholder="" value="<?php echo $evs['lokasi']; ?>" disabled>
-                                                                            <div class="invalid-feedback">
-                                                                                Valid first name is required.
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col-md-6 mb-3">
-                                                                            <label for="firstName">Departemen</label>
-                                                                            <input type="text" class="form-control" name="departemen" id="firstName" placeholder="" value="<?php echo $evs['departemen']; ?>" disabled>
-                                                                            <div class="invalid-feedback">
-                                                                                Valid first name is required.
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col-md-6 mb-3">
-                                                                            <label for="firstName">Tanggal Inspeksi</label>
-                                                                            <input type="text" class="form-control" name="start" id="firstName" placeholder="" value="<?php echo $evs['start']; ?>" disabled>
-                                                                            <div class="invalid-feedback">
-                                                                                Valid first name is required.
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col-md-6 mb-3">
-                                                                            <label for="keterangan">Keterangan</label>
-                                                                            <select class="custom-select d-block w-100" name="keterangan" id="keterangan" required="">
-                                                                                <option value="">Pilih...</option>
-                                                                                <option value="Belum Inspeksi" <?php echo ($evs['keterangan'] == 'Belum Inspeksi') ? 'selected' : ''; ?>>Belum Inspeksi</option>
-                                                                                <option value="Sudah Inspeksi" <?php echo ($evs['keterangan'] == 'Sudah Inspeksi') ? 'selected' : ''; ?>>Sudah Inspeksi</option>
-                                                                            </select>
-                                                                            <div class="invalid-feedback">
-                                                                                Valid keterangan is required.
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                                <button type="submit" class="btn btn-primary">Save changes</button>
-                                                            </div>
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <?php
-                                                    $no++;
-                                                }
-                                                ?>
-                                            </tbody>
-                                        </table>
-                                    </div>
+        .card-body {
+            padding: 10px;
+        }
+
+        .folder-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        .year-title {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .button-group {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            margin: 0 10px;
+        }
+        @media (max-width: 768px) {
+   #monthGrid {
+        padding-left: 15px;
+        padding-right: 15px;
+        position: relative; 
+        left: 80px;
+    }
+}
+
+    </style>
+</head>
+<body>
+    
+    <div class="container mt-5">
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <div class="row justify-content-center">
+    <div class="col-lg-10">
+    <div class="year-title text-center" id="yearDisplay"></div>
+        <div class="button-group">
+            <button class="btn btn-primary" id="prevYearBtn">Previous Year</button>
+            <button class="btn btn-primary" id="nextYearBtn">Next Year</button>
+        </div>
+
+        <div class="row justify-content-center" id="monthGrid">
+            <!-- Bulan-bulan akan dimasukkan di sini -->
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and jQuery -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            let currentYear = new Date().getFullYear();
+            const yearDisplay = document.getElementById("yearDisplay");
+            const months = [
+                "Januari", "Februari", "Maret", "April",
+                "Mei", "Juni", "Juli", "Agustus",
+                "September", "Oktober", "November", "Desember"
+            ];
+
+            function updateYear() {
+                yearDisplay.innerText = `Tahun ${currentYear}`;
+                const monthGrid = document.getElementById("monthGrid");
+                monthGrid.innerHTML = ""; // Kosongkan grid
+
+                months.forEach(month => {
+                    const colDiv = document.createElement("div");
+                    colDiv.classList.add("col-lg-3", "col-md-4", "col-sm-6");
+
+                    // Bungkus seluruh elemen card dengan <a> agar seluruh kartu menjadi link
+                    const link = document.createElement("a");
+                    link.href = `data_inspeksi.php?bulan=${month}&tahun=${currentYear}`; // Tautan dengan parameter bulan dan tahun
+                    link.classList.add("folder-card");
+
+                    const cardDiv = document.createElement("div");
+                    cardDiv.classList.add("card");
+
+                    const img = document.createElement("img");
+                    img.src = "https://img.icons8.com/color/96/000000/folder-invoices.png";
+                    img.alt = "Folder";
+                    img.classList.add("folder-image");
+
+                    const cardBodyDiv = document.createElement("div");
+                    cardBodyDiv.classList.add("card-body");
+
+                    const h5 = document.createElement("h5");
+                    h5.classList.add("folder-title");
+                    h5.innerText = `${month} ${currentYear}`;
+
+                    cardBodyDiv.appendChild(h5);
+                    cardDiv.appendChild(img);
+                    cardDiv.appendChild(cardBodyDiv);
+                    link.appendChild(cardDiv); // Tambahkan elemen card ke dalam <a>
+                    colDiv.appendChild(link); // Tambahkan elemen <a> ke dalam div kolom
+                    monthGrid.appendChild(colDiv);
+                });
+            }
+
+            document.getElementById("prevYearBtn").addEventListener("click", () => {
+                currentYear--;
+                updateYear();
+            });
+
+            document.getElementById("nextYearBtn").addEventListener("click", () => {
+                currentYear++;
+                updateYear();
+            });
+
+            updateYear();
+        });
+    </script>
+
                                 </div>
+
                             </div>
                         </div>
                     </div>
-
+                </div>
+    </div>
 
                 </div>
-                
-
             </div>
-            <footer class="footer">
-                    <div class="container-fluid d-flex justify-content-between">
-
-                        <div class="copyright">
-                            PT Corinthian Industries Indonesia
-                        </div>
-
-                    </div>
-                </footer>
-
-            <!-- Custom template | don't include it in your project! -->
-
-            <!-- End Custom template -->
+            
         </div>
-        <script>
-            $(document).ready(function() {
-                $('#example').DataTable({
-                    "paging": true,
-                    "lengthMenu": [10, 25, 50, 75, 100], // Atur panjang halaman sesuai kebutuhan Anda
-                    "pageLength": 10 // Set jumlah baris default per halaman
-                });
-            });
-        </script>
-        <script src="../assets/js/core/jquery-3.7.1.min.js"></script>
-        <script src="../assets/js/core/popper.min.js"></script>
-        <script src="../assets/js/core/bootstrap.min.js"></script>
+        
+        
 
 
-        <!-- jQuery Scrollbar -->
-        <script src="../assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
+        <!-- Custom template | don't include it in your project! -->
 
-        <!-- Chart JS -->
-        <script src="../assets/js/plugin/chart.js/chart.min.js"></script>
+        <!-- End Custom template -->
+    </div>
+    <!--   Core JS Files   -->
+    <script src="../assets/js/core/jquery-3.7.1.min.js"></script>
+    <script src="../assets/js/core/popper.min.js"></script>
+    <script src="../assets/js/core/bootstrap.min.js"></script>
 
-        <!-- jQuery Sparkline -->
-        <script src="../assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js"></script>
 
-        <!-- Chart Circle -->
-        <script src="../assets/js/plugin/chart-circle/circles.min.js"></script>
+    <!-- jQuery Scrollbar -->
+    <script src="../assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
 
-        <!-- Datatables -->
-        <script src="../assets/js/plugin/datatables/datatables.min.js"></script>
+    <!-- Chart JS -->
+    <script src="../assets/js/plugin/chart.js/chart.min.js"></script>
 
-        <!-- Bootstrap Notify -->
-        <script src="../assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script>
+    <!-- jQuery Sparkline -->
+    <script src="../assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js"></script>
 
-        <!-- jQuery Vector Maps -->
-        <script src="../assets/js/plugin/jsvectormap/jsvectormap.min.js"></script>
-        <script src="../assets/js/plugin/jsvectormap/world.js"></script>
+    <!-- Chart Circle -->
+    <script src="../assets/js/plugin/chart-circle/circles.min.js"></script>
 
-        <!-- Sweet Alert -->
-        <script src="../assets/js/plugin/sweetalert/sweetalert.min.js"></script>
+    <!-- Datatables -->
+    <script src="../assets/js/plugin/datatables/datatables.min.js"></script>
 
-        <!-- Kaiadmin JS -->
-        <script src="../assets/js/kaiadmin.min.js"></script>
+    <!-- Bootstrap Notify -->
+    <script src="../assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script>
 
-        <!-- Kaiadmin DEMO methods, don't include it in your project! -->
+    <!-- jQuery Vector Maps -->
+    <script src="../assets/js/plugin/jsvectormap/jsvectormap.min.js"></script>
+    <script src="../assets/js/plugin/jsvectormap/world.js"></script>
 
-        <script>
-            $("#lineChart").sparkline([102, 109, 120, 99, 110, 105, 115], {
-                type: "line",
-                height: "70",
-                width: "100%",
-                lineWidth: "2",
-                lineColor: "#177dff",
-                fillColor: "rgba(23, 125, 255, 0.14)",
-            });
+    <!-- Sweet Alert -->
+    <script src="../assets/js/plugin/sweetalert/sweetalert.min.js"></script>
 
-            $("#lineChart2").sparkline([99, 125, 122, 105, 110, 124, 115], {
-                type: "line",
-                height: "70",
-                width: "100%",
-                lineWidth: "2",
-                lineColor: "#f3545d",
-                fillColor: "rgba(243, 84, 93, .14)",
-            });
+    <!-- Kaiadmin JS -->
+    <script src="../assets/js/kaiadmin.min.js"></script>
 
-            $("#lineChart3").sparkline([105, 103, 123, 100, 95, 105, 115], {
-                type: "line",
-                height: "70",
-                width: "100%",
-                lineWidth: "2",
-                lineColor: "#ffa534",
-                fillColor: "rgba(255, 165, 52, .14)",
-            });
-        </script>
-        <script>
-            function resetTable() {
-                const table = document.getElementById('table');
-                const tr = table.getElementsByTagName('tr');
-                for (let i = 1; i < tr.length; i++) {
-                    tr[i].style.display = '';
-                }
-            }
+    <!-- Kaiadmin DEMO methods, don't include it in your project! -->
 
-            document.getElementById('searchInput').addEventListener('keyup', function() {
-                const input = document.getElementById('searchInput');
-                const filter = input.value.toLowerCase();
-                const table = document.getElementById('table');
-                const tr = table.getElementsByTagName('tr');
+    <script>
+        $("#lineChart").sparkline([102, 109, 120, 99, 110, 105, 115], {
+            type: "line",
+            height: "70",
+            width: "100%",
+            lineWidth: "2",
+            lineColor: "#177dff",
+            fillColor: "rgba(23, 125, 255, 0.14)",
+        });
 
-                for (let i = 1; i < tr.length; i++) {
-                    let show = false;
-                    const tds = tr[i].getElementsByTagName('td');
-                    for (let j = 0; j < tds.length; j++) {
-                        const td = tds[j];
-                        if (td) {
-                            if (td.innerText.toLowerCase().includes(filter)) {
-                                show = true;
-                            }
-                        }
-                    }
-                    if (show) {
-                        tr[i].style.display = '';
-                    } else {
-                        tr[i].style.display = 'none';
-                    }
-                }
-            });
-        </script>
+        $("#lineChart2").sparkline([99, 125, 122, 105, 110, 124, 115], {
+            type: "line",
+            height: "70",
+            width: "100%",
+            lineWidth: "2",
+            lineColor: "#f3545d",
+            fillColor: "rgba(243, 84, 93, .14)",
+        });
+
+        $("#lineChart3").sparkline([105, 103, 123, 100, 95, 105, 115], {
+            type: "line",
+            height: "70",
+            width: "100%",
+            lineWidth: "2",
+            lineColor: "#ffa534",
+            fillColor: "rgba(255, 165, 52, .14)",
+        });
+    </script>
 
 
 </body>
-
 
 </html>

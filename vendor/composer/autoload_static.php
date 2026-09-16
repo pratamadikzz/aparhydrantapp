@@ -36,6 +36,10 @@ class ComposerStaticInit84a85fa308b336a832556fb8bde51a2e
             'MyCLabs\\Enum\\' => 13,
             'Matrix\\' => 7,
         ),
+        'F' => 
+        array (
+            'Fpdf\\' => 5,
+        ),
         'C' => 
         array (
             'Complex\\' => 8,
@@ -79,6 +83,10 @@ class ComposerStaticInit84a85fa308b336a832556fb8bde51a2e
         'Matrix\\' => 
         array (
             0 => __DIR__ . '/..' . '/markbaker/matrix/classes/src',
+        ),
+        'Fpdf\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/fpdf/fpdf/src/Fpdf',
         ),
         'Complex\\' => 
         array (
