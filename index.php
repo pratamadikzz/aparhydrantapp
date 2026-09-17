@@ -680,7 +680,7 @@
                     <div class="collapse" id="apar">
                       <ul class="nav nav-collapse">
                         <li>
-                          <a href="admin/Hydrant.php">
+                          <a href="admin/hydrant.php">
                             <span class="sub-item">Data Hydrant</span>
                           </a>
                         </li>
