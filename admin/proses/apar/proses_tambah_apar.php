@@ -21,14 +21,14 @@ $jenis_tabung = $_POST['jenis_tabung'];
 // Check if plat_nomer is provided
 if (empty($plat)) {
     // Insert into data_apar without plat_nomer
-    $query = "INSERT INTO data_apar (code_apar, lokasi, departemen, jenis_apar, nozzle, tabung, presure, catridge, pin, handle, tanggal_refill, tanggal_expired, berat) 
-              VALUES ('$codeApar', '$lokasi', '$departemen', '$jenisApar', '$nozzle', '$tabung', '$presure', '$catridge', '$pin', '$handle', '$tgl_refill', '$tgl_exp', '$berat')";
+    $query = "INSERT INTO data_apar (code_apar, lokasi, departemen, jenis_apar, nozzle, tabung, presure, catridge, pin, handle, tanggal_refill, tanggal_expired, berat, jenis_tabung) 
+              VALUES ('$codeApar', '$lokasi', '$departemen', '$jenisApar', '$nozzle', '$tabung', '$presure', '$catridge', '$pin', '$handle', '$tgl_refill', '$tgl_exp', '$berat', '$jenis_tabung')";
 
     $redirect = 'apar.php';
 } else {
     // Insert into data_apar with plat_nomer
-    $query = "INSERT INTO data_apar (code_apar, lokasi, departemen, jenis_apar, nozzle, tabung, presure, catridge, pin, handle, tanggal_refill, tanggal_expired, berat, plat_nomer) 
-              VALUES ('$codeApar', '$lokasi', '$departemen', '$jenisApar', '$nozzle', '$tabung', '$presure', '$catridge', '$pin', '$handle', '$tgl_refill', '$tgl_exp', '$berat', '$plat')";
+    $query = "INSERT INTO data_apar (code_apar, lokasi, departemen, jenis_apar, nozzle, tabung, presure, catridge, pin, handle, tanggal_refill, tanggal_expired, berat, plat_nomer, jenis_tabung) 
+              VALUES ('$codeApar', '$lokasi', '$departemen', '$jenisApar', '$nozzle', '$tabung', '$presure', '$catridge', '$pin', '$handle', '$tgl_refill', '$tgl_exp', '$berat', '$plat', '$jenis_tabung')";
 
     $redirect = 'apar_mobil.php';
 }

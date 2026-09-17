@@ -564,13 +564,13 @@ $filter = isset($_GET['filter']) ? $_GET['filter'] : 'all';
 $query = "
     SELECT 
         e.*, 
-        l.lokasi, 
-        d.departemen 
+        l.lokasi as nama_lokasi, 
+        d.departemen as nama_departemen 
     FROM
         data_apar e 
-    JOIN 
+    LEFT JOIN 
         tbl_lokasi l ON e.lokasi = l.id 
-    JOIN 
+    LEFT JOIN 
         tbl_departemen d ON e.departemen = d.id 
 ";
 
@@ -640,8 +640,8 @@ if (!$result) {
     ?>
         <tr style="<?php echo $rowStyle; ?>">
             <td><?php echo $row['code_apar']; ?></td>
-            <td><?php echo $row['lokasi']; ?></td>
-            <td><?php echo $row['departemen']; ?></td>
+            <td><?php echo !empty($row['plat_nomer']) ? $row['plat_nomer'] : ($row['nama_lokasi'] ?? '-'); ?></td>
+            <td><?php echo !empty($row['plat_nomer']) ? 'Mobil' : ($row['nama_departemen'] ?? '-'); ?></td>
             <td><?php echo $row['tanggal_refill'] == '0000-00-00' ? 'Belum di Lihat' : date('d-m-Y', strtotime($row['tanggal_refill'])); ?></td>
             <td><?php echo $row['tanggal_expired'] == '0000-00-00' ? 'Belum di Lihat' : date('d-m-Y', strtotime($row['tanggal_expired'])); ?></td>
             <td><?php echo $row['kondisi']; ?></td>

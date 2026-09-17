@@ -33,6 +33,7 @@ if (isset($_GET['bulan']) && isset($_GET['tahun'])) {
     LEFT JOIN tbl_departemen td ON laporan.departemen = td.id
     WHERE MONTH(laporan.tanggal_inspeksi) = '$bulan_angka' 
     AND YEAR(laporan.tanggal_inspeksi) = '$tahun'
+    ORDER BY laporan.code_apar ASC
     ";
     
 

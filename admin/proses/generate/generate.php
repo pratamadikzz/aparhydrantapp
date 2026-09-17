@@ -570,8 +570,8 @@ if (isset($_GET['code'])) {
                                 <span id="lokasi_value" style="display: none;"><?php echo htmlspecialchars($row['lokasi']); ?></span>
                                 <span id="departemen_value" style="display: none;"><?php echo htmlspecialchars($row['departemen']); ?></span>
 
-                                <div id="qrcode" style="display:none;"></div> <!-- Div for QR code -->
-                                <canvas id="canvas" width="800" height="600" style="display:none;"></canvas> <!-- Ukuran kanvas ditingkatkan -->
+                                <div id="qrcode" style="display:none;"></div>
+                                <canvas id="canvas" width="1178" height="1000" style="display:none;"></canvas>
                             </center>
                         </div>
                     </div>
@@ -619,11 +619,11 @@ function generateQRCode() {
         // Generate QR code using QRCode.js
         var qrcodeDiv = document.getElementById("qrcode");
         qrcodeDiv.innerHTML = ""; // Clear previous QR code
-        var qrcode = new QRCode(qrcodeDiv, {
-            text: qrInput.value,
-            width: 300,
-            height: 300
-        });
+          var qrcode = new QRCode(qrcodeDiv, {
+              text: qrInput.value,
+              width: 380,
+              height: 350
+          });
 
         setTimeout(function() {
             var qrImg = qrcodeDiv.querySelector('img');
@@ -635,7 +635,7 @@ function generateQRCode() {
             // Load the card image
             var cardImage = new Image();
             cardImage.crossOrigin = "Anonymous"; // Ensure cross-origin is handled
-            cardImage.src = "../../../assets/img/6.png";
+            cardImage.src = "../../../assets/img/template_apar_baru.png";
             cardImage.onload = function() {
                 // Draw the card image on the canvas
                 context.globalCompositeOperation = "source-over";
@@ -646,42 +646,32 @@ function generateQRCode() {
                 qrImg.crossOrigin = "Anonymous";
                 qrImg.src = qrImgSrc;
 
-                qrImg.onload = function() {
-                    // Calculate the position for the QR code
-                    const qrX = canvas.width - qrImg.width - 18; 
-                    const qrY = 144;
+                  qrImg.onload = function() {
+                      const qrX = 665;
+                      const qrY = 420;
 
-                    // Draw the QR code on the canvas
-                    context.drawImage(qrImg, qrX, qrY, qrImg.width, qrImg.height);
+                      context.drawImage(qrImg, qrX, qrY, qrImg.width, qrImg.height);
 
-                    // Set text properties
-                    context.font = "bold 25px verdana";
-                    context.fillStyle = "black";
-                    context.textAlign = "left";
+                     context.font = "bold 28px verdana";
+                     context.fillStyle = "red";
+                     context.textAlign = "left";
 
-                    // Get the text values
-                    const noMesinText = document.getElementById('code_apar_value').innerText;
-                    const namaLokasiText = document.getElementById('lokasi_value').innerText;
-                    const namaDepartmentText = document.getElementById('departemen_value').innerText;
+                     const noMesinText = document.getElementById('code_apar_value').innerText;
+                     const namaLokasiText = document.getElementById('lokasi_value').innerText;
+                     const namaDepartmentText = document.getElementById('departemen_value').innerText;
 
-                    // Draw the labels on the canvas
-                    const labelX = 20;
-                    const valueX = 230; 
-                    const baseY = 278;
-                    const lineHeight = 60;
+                     const valueX = 860;
+                     const baseY = 260;
+                     const lineHeight = 45;
 
-                    // CODE APAR
-                    context.fillText(noMesinText, valueX, baseY);
+                     context.fillText(noMesinText, valueX, baseY);
 
-                    // LOKASI
-                    context.fillText(namaLokasiText, valueX, baseY + lineHeight);
+                     context.fillText(namaLokasiText, valueX, baseY + lineHeight);
 
-                    // DEPARTEMEN (pakai wrapText supaya turun ke bawah kalau panjang)
-                    wrapText(context, namaDepartmentText, valueX, baseY + lineHeight * 2, 200, 30);
+                     wrapText(context, namaDepartmentText, valueX, baseY + lineHeight * 2, 200, 30);
 
-                    // Show the canvas
-                    canvas.style.display = 'block';
-                }
+                     canvas.style.display = 'block';
+                 }
             }
         }, 1000); 
     }
